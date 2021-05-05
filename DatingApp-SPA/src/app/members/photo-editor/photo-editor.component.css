@@ -1,0 +1,27 @@
+img.img-thumbnail {
+    width: 100%;
+    height: auto;
+    margin-bottom: 2px;
+}
+
+img.img-transparent {
+    opacity: 0.4;
+}
+
+.nv-file-over {
+    border: dotted 3px red;
+}
+
+input[type=file] {
+    color: transparent;
+}
+
+.img-wrapper {
+    position: relative;
+}
+
+.img-text {
+    position: absolute;
+    bottom: 30%;
+    overflow: hidden;
+}
