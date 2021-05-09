@@ -97,11 +97,18 @@ namespace DatingApp.API.Data
         data is separated / divided into pages */
         public async Task<PagedList<User>> GetUsers(UsersParams usersParams) {
 
-            var users = _context.Users
+            var users = _context.Users.Where(u => u.Id != usersParams.UserId)
             .OrderByDescending(u => u.LastActive ).AsQueryable();
             users = users.Where(u => u.Id != usersParams.UserId);
 
             users = users.Where( u => u.Gender == usersParams.Gender);
+
+            if (usersParams.ShowNonVisitedMembers)
+            {
+                
+                var visitedMembers = await GetVisitedUsers(usersParams.UserId);
+                users = users.Where(u => !visitedMembers.Contains(u.Id));
+            }
 
             if(usersParams.Likers)
             {
@@ -139,7 +146,7 @@ namespace DatingApp.API.Data
             return await PagedList<User>.CreateAsync(users, usersParams.PageNumber, 
             usersParams.PageSize);
         }
-
+        //Private method for returning the Likers or Likees
         private async Task<IEnumerable<int>> GetUserLikes(int id, bool likers)
         {
             var user = await _context.Users
@@ -155,7 +162,15 @@ namespace DatingApp.API.Data
             {
                 return user.Likees.Where(u=> u.LikerId == id).Select(i => i.LikeeId);
             }
+        }
 
+        //Private method for returning the visited users
+        private async Task<IEnumerable<int>> GetVisitedUsers(int id)
+        {
+            var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == id );
+            
+            return user.Visitees.Where(u => u.VisitorId ==id).Select(i => i.VisitedId);
         }
 
         public async Task<bool> SaveAll () {

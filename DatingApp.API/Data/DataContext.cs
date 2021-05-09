@@ -61,6 +61,8 @@ namespace DatingApp.API.Data
             .WithMany(u => u.Likees)
             .HasForeignKey(u => u.LikerId )
             .OnDelete(DeleteBehavior.Restrict);
+            
+            //Visiting Done in Entity Framework
             ////////////////////////////////////////////////////////////////
 
             builder.Entity<Visit>()

@@ -1,0 +1,66 @@
+.img-thumbnail {
+    margin: 25px;
+    width: 85%;
+    height:85%;
+
+}
+
+.card-body {
+    padding: 0 25px;
+}
+
+.card-footer {
+    padding: 10px 15px;
+    background-color: #FFF;
+    border-top: none;
+}
+
+
+
+// We need to use ::ng-deep to overcome view encapsulation
+::ng-deep {
+    .custom-slider .ngx-slider .ngx-slider-bar {
+      background: #ccc;
+      height: 6px;
+      
+    }
+    .custom-slider .ngx-slider .ngx-slider-selection {
+      background: #eb6864;
+    }
+  
+    .custom-slider .ngx-slider .ngx-slider-pointer {
+      width: 18px;
+      height: 18px;
+      top: auto; /* to remove the default positioning */
+      bottom: 0;
+      transform: translateY(30%);
+      background-color: white;
+      border: 2px solid #ccc;
+    }
+  
+    .custom-slider .ngx-slider .ngx-slider-pointer:after {
+      display: none;
+    }
+  
+    .custom-slider .ngx-slider .ngx-slider-bubble {
+      bottom: 15px;
+    }
+  
+    .custom-slider .ngx-slider .ngx-slider-limit {
+      font-weight: bold;
+      color: orange;
+    }
+  
+    .custom-slider .ngx-slider .ngx-slider-tick {
+      width: 16px;
+      height: 16px;
+      margin-left: 5px;
+      border-radius: 50%;
+      background: white;
+      top: -1px;
+    }
+  
+    .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+      background: rgb(0, 120, 155);
+    }
+  }

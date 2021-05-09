@@ -5,6 +5,7 @@ import { User } from '../../_models/user';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
+import { UserParams } from 'src/app/_models/user-params';
 
 @Component({
   selector: 'app-member-list',
@@ -17,8 +18,9 @@ export class MemberListComponent implements OnInit {
   currentUser: User;
   user: User = JSON.parse(localStorage.getItem('user'));
   genderList = [{value: 'male', display: 'Males'}, {value: 'female', display: 'Females'}, {value: 'other', display: 'Other' }];
-  userParams: any = {};
+  userParams: UserParams;
   pagination: Pagination;
+  showNonVisitedMembers: boolean = true;
 
  
   constructor(private userService: UserService,
@@ -27,47 +29,24 @@ export class MemberListComponent implements OnInit {
           { }
 
   ngOnInit() {
+
+    this.userService.currentUserParams.subscribe(data => {
+      this.userParams = data;
+     })
+     
     this.route.data.subscribe(data => {
       this.users = data['users'].result;
       this.currentUser = this.users[0];
       this.pagination = data['users'].pagination;
+      this.showNonVisitedMembers = true;
     });
 
-    if (this.user.gender === 'female')
-    {
-      this.userParams.gender = 'male';
-    }
-    if(this.user.gender === 'male')
-    {
-      this.userParams.gender = 'female';
-    }
-    if(this.user.gender === 'other')
-    {
-      this.userParams.gender = 'other';
-    }
-
-    this.userParams.minAge = 18;
-    this.userParams.maxAge = 99;
-    this.userParams.orderBy = 'lastActive';
+   
   }
 
   resetFilters()
   {
-    if (this.user.gender === 'female')
-    {
-      this.userParams.gender = 'male';
-    }
-    if(this.user.gender === 'male')
-    {
-      this.userParams.gender = 'female';
-    }
-    if(this.user.gender === 'other')
-    {
-      this.userParams.gender = 'other';
-    }
-    this.userParams.minAge = 18;
-    this.userParams.maxAge = 99;
-
+    this.userService.resetUserParams();
     this.loadUsers();
   }
 
@@ -92,10 +71,8 @@ export class MemberListComponent implements OnInit {
     }
   }
 
-
-
   loadNextUsersAndConcatenate() {
-    this.userService.getUsers(this.pagination.currentPage+1, this.pagination.itemsPerPage, this.userParams)
+    this.userService.getUsers(this.pagination.currentPage+1, this.pagination.itemsPerPage, this.userParams, "", true)
     .subscribe((res: PaginatedResult<User[]>) => {
       this.users = [...this.users, ...res.result];
       this.pagination = res.pagination;
@@ -106,7 +83,7 @@ export class MemberListComponent implements OnInit {
   }
 
   loadUsers() {
-    this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
+    this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams, "", true)
     .subscribe((res: PaginatedResult<User[]>) => {
       this.users = res.result;
       this.currentUser = this.users[0];

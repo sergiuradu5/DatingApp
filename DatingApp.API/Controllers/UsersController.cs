@@ -127,7 +127,8 @@ namespace DatingApp.API.Controllers {
              visit = new Visit     //If the like doesn't exist already, this part creates a new like
             {
                 VisitorId = id,
-                VisitedId = visitedId
+                VisitedId = visitedId,
+                VisitedDate = DateTime.Now
 
             };
             _repo.Add<Visit>(visit); //Adding the newly created like to our repo

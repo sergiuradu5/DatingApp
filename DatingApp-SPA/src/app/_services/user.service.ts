@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../_models/user';
 import {environment} from '../../environments/environment';
 import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
 import { Message } from '../_models/message';
+import { UserParams } from '../_models/user-params';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -18,10 +19,23 @@ const httpOptions = {
 })
 export class UserService {
   baseUrl= environment.baseUrl;
+  user: User = JSON.parse(localStorage.getItem('user'));
+  //Storing user parameters for searching for other users
+  defaultUserParams = {
+    ...(this.user.gender === 'female' && {gender: 'male'}),
+    ...(this.user.gender === 'male' && {gender: 'female'}),
+    ...(this.user.gender === 'other' && {gender: 'other'}),
+    minAge: 18,
+    maxAge : 99,
+    orderBy : 'lastActive'
+    
+  };
+  private userParams = new BehaviorSubject(this.defaultUserParams);
+  currentUserParams = this.userParams.asObservable();
 
 constructor(private http: HttpClient) { }
 
-getUsers(page?, itemsPerPage?, userParams?, likesParam?): Observable<PaginatedResult<User[]>> {
+getUsers(page?, itemsPerPage?, userParams?, likesParam? : string, showNonVisitedMembers? : boolean): Observable<PaginatedResult<User[]>> {
   const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
 
   let params = new HttpParams();
@@ -47,6 +61,11 @@ getUsers(page?, itemsPerPage?, userParams?, likesParam?): Observable<PaginatedRe
   if(likesParam === 'Likees')
   {
     params = params.append('likees', 'true');
+  }
+  
+  console.log(`showNonVisitedMembers: ${showNonVisitedMembers}`);
+  if(showNonVisitedMembers) {
+    params = params.append('showNonVisitedMembers', 'true');
   }
 
   return this.http.get<User[]>(this.baseUrl + 'users', {observe: 'response', params})
@@ -130,5 +149,34 @@ markAsRead(userId: number, messageId: number) {
   this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + messageId + '/read', {})
   .subscribe();
 }
+
+updateUserParams(userParams: UserParams) {
+  
+  this.userParams.next(userParams);
+}
+
+resetUserParams() {
+    let defaultUserParams:any = {};
+    if (this.user.gender === 'female')
+    {
+      defaultUserParams.gender = 'male';
+    }
+    if(this.user.gender === 'male')
+    {
+      defaultUserParams.gender = 'female';
+    }
+    if(this.user.gender === 'other')
+    {
+      defaultUserParams.gender = 'other';
+    }
+    defaultUserParams.minAge = 18;
+    defaultUserParams.maxAge = 99;
+    defaultUserParams.orderBy = 'lastActive';
+    this.userParams.next(defaultUserParams);
+  }
+
+getUserParams() {
+  return this.userParams;
+  }
 
 }

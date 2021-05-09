@@ -10,7 +10,7 @@ import { catchError } from 'rxjs/operators';
 export class MatchesResolver implements Resolve<User[]> {
 
   pageNumber =1;
-  pageSize = 2;
+  pageSize = 4;
   likesParam = 'Likers';
   constructor(
     private userService: UserService,

@@ -5,6 +5,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import {appRoutes} from './routes';
 import { JwtModule } from '@auth0/angular-jwt';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+
 
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -48,6 +50,7 @@ import { PhotosForModerationResolver } from './_resolver/photos-for-moderation.r
 import { FooterComponent } from './footer/footer.component';
 import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { MemberCardDetailedComponent } from './members/member-card-detailed/member-card-detailed.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 
@@ -82,7 +85,8 @@ export function tokenGetter() {
       RolesModalComponent,
       FooterComponent,
       LearnMoreComponent,
-      MemberCardDetailedComponent
+      MemberCardDetailedComponent,
+      SettingsComponent,
    ],
    imports: [
       BrowserModule,
@@ -90,6 +94,7 @@ export function tokenGetter() {
       FormsModule,
       BrowserAnimationsModule,
       NgxGalleryModule,
+      NgxSliderModule,
       // NgxNavbarModule,
       ModalModule.forRoot(),
       ButtonsModule.forRoot(),

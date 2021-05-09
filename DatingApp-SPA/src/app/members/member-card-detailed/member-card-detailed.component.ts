@@ -23,6 +23,16 @@ export class MemberCardDetailedComponent implements OnInit {
 
   skipUser() {
     this.skipCurrentUser.emit(this.user.id);
+    this.visitUser(this.user.id);
+  }
+
+  visitUser(visitedId: number) {
+    this.userService.visitUser(this.authService.decodedToken.nameid, visitedId).subscribe( data=> {
+      this.alertify.success('You have visited ' + this.user.knownAs);
+    }, error => {
+      this.alertify.error(error);
+    })
+
   }
 
   sendLike(recipientId: number)
@@ -32,6 +42,8 @@ export class MemberCardDetailedComponent implements OnInit {
     }, error => {
       this.alertify.error(error);
     }); 
+
+    this.skipUser();
   }
 
 }
