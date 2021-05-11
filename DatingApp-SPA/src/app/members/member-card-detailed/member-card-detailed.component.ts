@@ -5,6 +5,7 @@ import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from './keyframes';
+import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation } from 'ngx-gallery';
 
 @Component({
   selector: 'app-member-card-detailed',
@@ -21,6 +22,9 @@ import * as kf from './keyframes';
   ]
 })
 export class MemberCardDetailedComponent implements OnInit {
+  galleryOptions: NgxGalleryOptions[];
+  galleryImages: NgxGalleryImage[];
+  showGalleryArrows: boolean;
   animationState: string;
   
   @Input() user: User;
@@ -31,6 +35,42 @@ export class MemberCardDetailedComponent implements OnInit {
     private userService: UserService,
     private alertify: AlertifyService
   ) { }
+
+  ngOnInit() {
+    this.showGalleryArrows = this.user.photos.length > 1;
+    this.galleryOptions = [
+      {
+        width: '507px',
+        height: '507px',
+        imagePercent: 100,
+        imageAnimation: NgxGalleryAnimation.Slide,
+        imageArrows: this.showGalleryArrows,
+        thumbnails: false,
+        preview: false
+      }
+    ];
+    this.galleryImages =this.getImages();
+  }
+
+  getImages() {
+    const imageUrls = [];
+    console.log('[getImages()] Passed User: ', this.user);
+    imageUrls.push({
+      small: this.user.photoUrl,
+      medium: this.user.photoUrl,
+      big: this.user.photoUrl
+    });
+    for (const photo  of this.user.photos) {
+      if (this.user.photoUrl !== photo.url) {
+        imageUrls.push({
+        small: photo.url,
+        medium: photo.url,
+        big: photo.url
+        });
+      }
+    }
+    return imageUrls;
+  }
 
   startAnimation(state) {
     console.log(state)
@@ -43,8 +83,7 @@ export class MemberCardDetailedComponent implements OnInit {
     this.animationState = '';
   }
 
-  ngOnInit() {
-  }
+  
 
   skipUser() {
     this.startAnimation('slideOutLeft');

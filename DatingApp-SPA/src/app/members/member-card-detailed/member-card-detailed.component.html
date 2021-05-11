@@ -4,14 +4,16 @@
     (swipeleft)="skipUser()"
     (swiperight)="sendLike(user.id)">
     <div class="card-img-wrapper">
-        <img class="card-img-top" src="{{user.photoUrl || '../../../../../assets/user.png'}}" alt="{{user.knownAs}}">
-      <ul class="list-inline member-icons animate text-center">
-        <button class="btn-md btn-primary ml-3 mr-3 member-icon" (tap)="skipUser()"> <i class="fa fa-times-circle fa-3x"></i></button>
-        <button class="btn-md btn-primary ml-3 mr-3 member-icon"
-        [routerLink]="['/members/', user.id]"> <i class="fa fa-user fa-3x"></i></button>
-        <button class="btn-md btn-primary ml-3 mr-3 member-icon" (tap)="sendLike(user.id)"> <i class="fa fa-heart fa-3x"></i></button>
-        
-      </ul>
+      <ngx-gallery class="card-img-top" [options]="galleryOptions" [images]="galleryImages"> </ngx-gallery>
+        <ul class="list-inline member-icons animate text-center">
+          <button class="btn-md btn-primary ml-3 mr-3 member-icon" (tap)="skipUser()"> <i class="fa fa-times-circle fa-3x"></i></button>
+          <button class="btn-md btn-primary ml-3 mr-3 member-icon"
+          [routerLink]="['/members/', user.id]"> <i class="fa fa-user fa-3x"></i></button>
+          <button class="btn-md btn-primary ml-3 mr-3 member-icon" (tap)="sendLike(user.id)"> <i class="fa fa-heart fa-3x"></i></button>
+        </ul>
+
+      
+      
       </div>
       <div class="card-body p-1">
         <h6 class="card-title text-center mb-1"> {{user.knownAs}}, {{user.age}} 

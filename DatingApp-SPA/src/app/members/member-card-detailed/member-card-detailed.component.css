@@ -20,6 +20,7 @@
 .card-img-wrapper {
     overflow: hidden;
     position: relative;
+    z-index: 1;
 }
 
 .member-icons {
@@ -30,6 +31,7 @@
     margin-right: auto;
     margin-left: auto;
     opacity: 0;
+    z-index: 10000;
 }
 
 .member-icon {
