@@ -5,6 +5,7 @@ import { UserService } from '../_services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { Pagination, PaginatedResult } from '../_models/pagination';
 import { User } from '../_models/user';
+import { UserSearchParams } from '../_models/user-search-params';
 
 @Component({
   selector: 'app-matches',
@@ -40,7 +41,14 @@ export class MatchesComponent implements OnInit {
   }
 
   loadUsers() {
-    this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, null, this.likesParam)
+    let userParams : UserSearchParams = {
+      pageNumber: this.pagination.currentPage,
+      pageSize: this.pagination.itemsPerPage,
+      likers: this.likesParam === 'Likers' ? true : false,
+      likees: this.likesParam === 'Likees' ? true : false,
+      showNonVisitedMembers: false
+    }
+    this.userService.getUsers(userParams)
     .subscribe((res: PaginatedResult<User[]>) => {
       
       this.users = res.result;

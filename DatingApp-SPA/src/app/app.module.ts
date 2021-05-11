@@ -51,6 +51,7 @@ import { FooterComponent } from './footer/footer.component';
 import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { MemberCardDetailedComponent } from './members/member-card-detailed/member-card-detailed.component';
 import { SettingsComponent } from './settings/settings.component';
+import { SettingsResolver } from './_resolver/settings.resolver';
 
 
 
@@ -123,7 +124,8 @@ export function tokenGetter() {
       MatchesResolver,
       MessagesResolver,
       AdminService,
-      PhotosForModerationResolver
+      PhotosForModerationResolver,
+      SettingsResolver
    ],
    entryComponents: [
       RolesModalComponent
