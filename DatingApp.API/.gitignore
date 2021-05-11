@@ -2,7 +2,8 @@
 bin
 obj
 *.db
-*.db-wal
 *.db-shm
+*.db-wal
 appsettings.json
 wwwroot
+.gitignore
