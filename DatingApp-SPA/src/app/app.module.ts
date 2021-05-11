@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -112,7 +112,8 @@ export function tokenGetter() {
                allowedDomains: ['localhost:5000'],
                disallowedRoutes: ['localhost:5000/api/auth']
             }
-      })
+      }),
+      HammerModule
    ],
    providers: [
       AuthService,
