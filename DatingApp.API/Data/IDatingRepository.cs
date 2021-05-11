@@ -11,9 +11,10 @@ namespace DatingApp.API.Data
         void Add<T>(T entity) where T: class;
         void Delete<T>(T entity) where T: class;
         Task<bool> SaveAll();
-        Task<PagedList<User>> GetUsers(UsersParams userParams);
+        Task<PagedList<User>> GetUsers(UserParams userParams, UserSearchFilter userSeachFilter);
         Task<User> GetOwnUser(int id);
         Task<User> GetOtherUser(int id);
+        Task<UserSearchFilter> GetUserSearchFilter(int id); /* Getting the stored user params */
         Task<Photo> GetPhoto(int id);
         Task<PagedList<PhotoForModerationDTO>> GetPhotosForModeration(PhotosForModerationParams messageParams);
         Task<Photo> GetMainPhotoForUser(int userId);
@@ -22,5 +23,6 @@ namespace DatingApp.API.Data
         Task<Message> GetMessage(int id);
         Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
         Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId); /*Conversation between two users*/
+        
     }
 }

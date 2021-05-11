@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -25,15 +26,17 @@ namespace DatingApp.API.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IDatingRepository _repo;
 
         public AuthController(IConfiguration config, IMapper mapper,
-         UserManager<User> userManager, SignInManager<User> signInManager)
+         UserManager<User> userManager, SignInManager<User> signInManager, IDatingRepository repo)
         {
             
             _config=config;
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
+            _repo = repo;
         }
 
         [HttpPost("register")]
@@ -45,10 +48,33 @@ namespace DatingApp.API.Controllers
             var result = await _userManager.CreateAsync(userToCreate, userForRegisterDTO.Password);
             result = await _userManager.AddToRoleAsync(userToCreate, "Member");
             var userToReturn = _mapper.Map<UserForDetailedDTO>(userToCreate);
+            String gender = "";
+            if (userToCreate.Gender == "male") {
+                gender = "female";
+            }
+            if (userToCreate.Gender == "female") {
+                gender = "male";
+            }
+            if (userToCreate.Gender == "other") {
+                gender = "other";
+            }
+
+            var defaultUserSearchFilter = new UserSearchFilter{
+            
+                UserId = userToCreate.Id,
+                Gender = gender,
+                MinAge = 18,
+                MaxAge = 99,
+                OrderBy = "lastActive"
+            };
 
             if(result.Succeeded)
             {
+                _repo.Add<UserSearchFilter>(defaultUserSearchFilter); //Adding the newly created like to our repo
+
+                if(await _repo.SaveAll()) {
                   return CreatedAtRoute("GetUser", new { controller = "Users", id = userToCreate.Id}, userToReturn );
+                }
             }
             return BadRequest(result.Errors);
 
@@ -68,6 +94,9 @@ namespace DatingApp.API.Controllers
             }
             var result = await _signInManager.CheckPasswordSignInAsync(user,
             userForLoginDTO.Password, false);
+
+            var userSearchFilter = await _repo.GetUserSearchFilter(user.Id);
+            var userSearchFilterForReturn = _mapper.Map<UserSearchFilterForReturnDTO>(userSearchFilter);
            
             if (result.Succeeded)
             {
@@ -76,7 +105,8 @@ namespace DatingApp.API.Controllers
                     var userToReturn = _mapper.Map<UserForListDTO>(appUser);
                  return Ok(new {
                 token= GenerateJwtToken(appUser).Result,
-                user = userToReturn
+                user = userToReturn,
+                searchFilter = userSearchFilterForReturn
             });
             }
             return Unauthorized();

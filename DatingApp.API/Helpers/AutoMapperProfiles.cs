@@ -30,7 +30,13 @@ namespace DatingApp.API.Helpers
                     .MapFrom(u=> u.Sender.Photos.FirstOrDefault(p => p.IsMain).Url))
                 .ForMember(m => m.RecipientPhotoUrl, opt => opt
                     .MapFrom(u=> u.Recipient.Photos.FirstOrDefault(p => p.IsMain).Url));
-            
+
+            CreateMap<UserSearchFilter, UserSearchFilterForReturnDTO>();
+            CreateMap<UserSearchFilterForUpdateDTO, UserSearchFilter >();
+
+            CreateMap<UserParamsAndSearchFilterFromQueryDTO, UserParams>();
+            CreateMap<UserParamsAndSearchFilterFromQueryDTO, UserSearchFilter >();
+            // CreateMap<UserParamsAndSearchFilterFromQueryDTO, UserParamsAndSearchFilter>();
 
         }
     }
