@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using DatingApp.API.Helpers;
 
 namespace DatingApp.API.Models
 {
@@ -28,6 +29,8 @@ namespace DatingApp.API.Models
         public virtual ICollection<Message> MessagesReceived { get; set; }
 
         public virtual ICollection<UserRole> UserRoles { get; set; }
+        //Storing User Params inside the Database
+        public virtual UserSearchFilter UserParams { get; set; }
 
     }
 }

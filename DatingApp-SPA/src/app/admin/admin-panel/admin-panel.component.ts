@@ -12,7 +12,7 @@ import { AdminService } from 'src/app/_services/admin.service';
 })
 export class AdminPanelComponent implements OnInit {
   @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
-  userRoles = this.authService.getRoles()
+  userRoles = this.authService.getRoles();
   constructor(private authService: AuthService,
               private route: ActivatedRoute,
               private adminService: AdminService,

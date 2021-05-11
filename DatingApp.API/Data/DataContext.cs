@@ -22,6 +22,8 @@ namespace DatingApp.API.Data
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<UserSearchFilter> UserSearchFilters {get; set; }
+
         /*Overriding a function*/
         protected override void OnModelCreating(ModelBuilder builder)
         {/*With this OnModelCreating function we create our own tables*/

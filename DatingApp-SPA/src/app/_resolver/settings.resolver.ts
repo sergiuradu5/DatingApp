@@ -7,9 +7,10 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UserSearchFilter } from '../_models/user-search-filter';
 import { UserSearchParams } from '../_models/user-search-params';
+import { AuthService } from '../_services/auth.service';
 
 @Injectable()
-export class MemberListResolver implements Resolve<User[]> {
+export class SettingsResolver implements Resolve<User[]> {
 
   pageNumber = 1;
   pageSize = 4;
@@ -17,27 +18,13 @@ export class MemberListResolver implements Resolve<User[]> {
   constructor(
     private userService: UserService,
     private router: Router,
-    private alertify: AlertifyService
-  ) {
-    this.userService.currentUserSearchFilter.subscribe(data => {
-      this.userSearchFilter = data;
-    })
-  }
+    private alertify: AlertifyService,
+    private authService: AuthService
+  ) { }
 
     resolve(route: ActivatedRouteSnapshot) : Observable<User[]> {
-          let userParams : UserSearchParams;
-        
-          console.log('member-list.resolver with userSearchFilter: ', this.userSearchFilter);
 
-          userParams  = {
-            pageNumber: this.pageNumber,
-            pageSize: this.pageSize,
-            likers: false,
-            likees: false,
-            showNonVisitedMembers: true
-          }
-
-          return this.userService.getUsers(userParams, this.userSearchFilter).pipe(
+          return this.userService.getUserSearchFilter(this.authService.decodedToken.nameid).pipe(
             catchError(error => {
               this.alertify.error('Problem retreiving data');
               this.router.navigate(['/home']);

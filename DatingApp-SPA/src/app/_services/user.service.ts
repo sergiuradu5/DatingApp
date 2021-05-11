@@ -6,7 +6,8 @@ import {environment} from '../../environments/environment';
 import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
 import { Message } from '../_models/message';
-import { UserParams } from '../_models/user-params';
+import { UserSearchFilter } from '../_models/user-search-filter';
+import { UserSearchParams } from '../_models/user-search-params';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -21,54 +22,60 @@ export class UserService {
   baseUrl= environment.baseUrl;
   user: User = JSON.parse(localStorage.getItem('user'));
   //Storing user parameters for searching for other users
-  defaultUserParams = {
-    ...(this.user.gender === 'female' && {gender: 'male'}),
-    ...(this.user.gender === 'male' && {gender: 'female'}),
-    ...(this.user.gender === 'other' && {gender: 'other'}),
-    minAge: 18,
-    maxAge : 99,
-    orderBy : 'lastActive'
+  // defaultUserSearchFilter = {
+  //   ...(this.user.gender === 'female' && {gender: 'male'}),
+  //   ...(this.user.gender === 'male' && {gender: 'female'}),
+  //   ...(this.user.gender === 'other' && {gender: 'other'}),
+  //   minAge: 18,
+  //   maxAge : 99,
+  //   orderBy : 'lastActive'
     
-  };
-  private userParams = new BehaviorSubject(this.defaultUserParams);
-  currentUserParams = this.userParams.asObservable();
+  // };
+  localStorageUserSearchFilter : UserSearchFilter = JSON.parse(localStorage.getItem('searchFilter'));
+  private userSearchFilter = new BehaviorSubject<UserSearchFilter>(this.localStorageUserSearchFilter);
+  currentUserSearchFilter = this.userSearchFilter.asObservable();
 
 constructor(private http: HttpClient) { }
 
-getUsers(page?, itemsPerPage?, userParams?, likesParam? : string, showNonVisitedMembers? : boolean): Observable<PaginatedResult<User[]>> {
+getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): Observable<PaginatedResult<User[]>> {
   const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
 
   let params = new HttpParams();
 
-  if(page != null && itemsPerPage != null) {
-    params = params.append('pageNumber', page);
-    params = params.append('pageSize', itemsPerPage);
+  if(userParams.pageNumber != null && userParams.pageSize != null) {
+    params = params.append('pageNumber', userParams.pageNumber.toString());
+    params = params.append('pageSize', userParams.pageSize.toString());
   }
+  // let userSearchFilterForBody: any = {};
 
-  if(userParams != null)
-  {
-    params = params.append('minAge', userParams.minAge);
-    params = params.append('maxAge', userParams.maxAge);
-    params = params.append('gender', userParams.gender);
-    params = params.append('orderBy', userParams.orderBy);
-  }
-
-  if(likesParam === 'Likers')
+  if(userParams.likers === true)
   {
     params = params.append('likers', 'true');
   }
 
-  if(likesParam === 'Likees')
+  if(userParams.likees === true)
   {
     params = params.append('likees', 'true');
   }
   
-  console.log(`showNonVisitedMembers: ${showNonVisitedMembers}`);
-  if(showNonVisitedMembers) {
+  console.log(`showNonVisitedMembers: ${userParams.showNonVisitedMembers}`);
+  if(userParams.showNonVisitedMembers) {
     params = params.append('showNonVisitedMembers', 'true');
   }
 
-  return this.http.get<User[]>(this.baseUrl + 'users', {observe: 'response', params})
+  if(userSearchFilter != null)
+  { 
+    // userSearchFilterForBody.minAge = userSearchFilter.minAge;
+    // userSearchFilterForBody.maxAge = userSearchFilter.maxAge;
+    // userSearchFilterForBody.gender = userSearchFilter.gender;
+    // userSearchFilterForBody.orderBy = userSearchFilter.orderBy;
+    params = params.append('minAge', userSearchFilter.minAge.toString());
+    params = params.append('maxAge', userSearchFilter.maxAge.toString());
+    params = params.append('gender', userSearchFilter.gender);
+    params = params.append('orderBy', userSearchFilter.orderBy);
+  }
+
+  return this.http.get<User[]>(this.baseUrl + 'users', {observe: 'response', params,})
   .pipe(
     map(response => {
       paginatedResult.result = response.body;
@@ -150,33 +157,53 @@ markAsRead(userId: number, messageId: number) {
   .subscribe();
 }
 
-updateUserParams(userParams: UserParams) {
+initiateUserSearchFilter(userSearchFilter: UserSearchFilter) {
   
-  this.userParams.next(userParams);
+  this.userSearchFilter.next(userSearchFilter);
+  console.log(`>>>>Initiating user search filter with localStorage.get('searchFilter'): `, userSearchFilter)
 }
 
-resetUserParams() {
-    let defaultUserParams:any = {};
+updateUserSearchFilter(userId: number, userSearchFilter: UserSearchFilter) {
+  const headers = new HttpHeaders()
+  .set('Content-Type', 'application/json')
+  .set('Access-Control-Allow-Origin', '*');
+  this.http.put(this.baseUrl + 'users/' + userId + '/searchFilter', userSearchFilter)
+    .subscribe(data => {
+      localStorage.removeItem('searchFilter');
+      localStorage.setItem('searchFilter', JSON.stringify(userSearchFilter));
+    })
+  
+}
+
+resetUserSearchFilter(id: number) {
+    let defaultUserSearchFilter:any = {};
+    defaultUserSearchFilter.userid = this.user.id;
     if (this.user.gender === 'female')
     {
-      defaultUserParams.gender = 'male';
+      defaultUserSearchFilter.gender = 'male';
     }
     if(this.user.gender === 'male')
     {
-      defaultUserParams.gender = 'female';
+      defaultUserSearchFilter.gender = 'female';
     }
     if(this.user.gender === 'other')
     {
-      defaultUserParams.gender = 'other';
+      defaultUserSearchFilter.gender = 'other';
     }
-    defaultUserParams.minAge = 18;
-    defaultUserParams.maxAge = 99;
-    defaultUserParams.orderBy = 'lastActive';
-    this.userParams.next(defaultUserParams);
+    defaultUserSearchFilter.minAge = 18;
+    defaultUserSearchFilter.maxAge = 99;
+    defaultUserSearchFilter.orderBy = 'lastActive';
+
+    this.userSearchFilter.next(defaultUserSearchFilter);
+    this.http.put(this.baseUrl + 'users/' + id + '/searchFilter', defaultUserSearchFilter)
+    .subscribe(data => {
+      localStorage.removeItem('searchFilter');
+      localStorage.setItem('searchFilter', JSON.stringify(defaultUserSearchFilter));
+    })
+
   }
 
-getUserParams() {
-  return this.userParams;
+getUserSearchFilter(id: number): Observable<UserSearchFilter> {
+  return this.http.get<UserSearchFilter>(this.baseUrl + 'users/' + id + '/searchFilter');
   }
-
 }

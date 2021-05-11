@@ -26,7 +26,7 @@ namespace DatingApp.API
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
                     context.Database.Migrate();
-                    Seed.SeedUser(userManager, roleManager);
+                    Seed.SeedUsers(userManager, roleManager, context);
                 }
                 catch (Exception ex)
                 {

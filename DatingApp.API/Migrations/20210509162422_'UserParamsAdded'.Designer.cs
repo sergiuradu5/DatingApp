@@ -3,14 +3,16 @@ using System;
 using DatingApp.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210509162422_'UserParamsAdded'")]
+    partial class UserParamsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,6 +228,50 @@ namespace DatingApp.API.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("DatingApp.API.Models.UserParams", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Likees")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Likers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxAge")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MinAge")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OrderBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PageNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PageSize")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowNonVisitedMembers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserParams");
+                });
+
             modelBuilder.Entity("DatingApp.API.Models.UserRole", b =>
                 {
                     b.Property<int>("UserId")
@@ -241,35 +287,6 @@ namespace DatingApp.API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-                });
-
-            modelBuilder.Entity("DatingApp.API.Models.UserSearchFilter", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("MaxAge")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinAge")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("OrderBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserSearchFilters");
                 });
 
             modelBuilder.Entity("DatingApp.API.Models.Value", b =>
@@ -434,6 +451,15 @@ namespace DatingApp.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DatingApp.API.Models.UserParams", b =>
+                {
+                    b.HasOne("DatingApp.API.Models.User", null)
+                        .WithOne("UserParams")
+                        .HasForeignKey("DatingApp.API.Models.UserParams", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DatingApp.API.Models.UserRole", b =>
                 {
                     b.HasOne("DatingApp.API.Models.Role", "Role")
@@ -445,15 +471,6 @@ namespace DatingApp.API.Migrations
                     b.HasOne("DatingApp.API.Models.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DatingApp.API.Models.UserSearchFilter", b =>
-                {
-                    b.HasOne("DatingApp.API.Models.User", null)
-                        .WithOne("UserParams")
-                        .HasForeignKey("DatingApp.API.Models.UserSearchFilter", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

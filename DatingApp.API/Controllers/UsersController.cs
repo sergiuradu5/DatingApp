@@ -24,25 +24,32 @@ namespace DatingApp.API.Controllers {
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers ([FromQuery]UsersParams usersParams) {
+        public async Task<IActionResult> GetUsers ([FromQuery]UserParamsAndSearchFilterFromQueryDTO userParamsAndSearchFilterFromQuery) {
             
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var userFromRepo = await _repo.GetOtherUser(currentUserId);
+            var userParams = _mapper.Map<UserParams>(userParamsAndSearchFilterFromQuery);
+            var userSearchFilter = await _repo.GetUserSearchFilter(currentUserId);
+            
+            
 
-            usersParams.UserId = currentUserId;
-            if(string.IsNullOrEmpty(usersParams.Gender))
+            if(string.IsNullOrEmpty(userSearchFilter.Gender))
             {
                 if(userFromRepo.Gender == "male")
-                usersParams.Gender = "female";
+                userSearchFilter.Gender = "female";
 
                 if(userFromRepo.Gender == "female")
-                usersParams.Gender = "male";
+                userSearchFilter.Gender = "male";
 
                 if(userFromRepo.Gender == "other")
-                usersParams.Gender = "other";
+                userSearchFilter.Gender = "other";
+
+                userSearchFilter.MinAge = 18;
+                userSearchFilter.MaxAge = 99;
+                userSearchFilter.OrderBy = "lastActive";
             }
 
-            var users = await _repo.GetUsers(usersParams);
+            var users = await _repo.GetUsers(userParams, userSearchFilter);
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDTO>>(users);
 
             Response.AddPagination(users.CurrentPage, users.PageSize, 
@@ -66,6 +73,41 @@ namespace DatingApp.API.Controllers {
             var userToReturn = _mapper.Map<UserForDetailedDTO>(user);
             return Ok (userToReturn);
         }
+
+        [HttpGet("{id}/searchFilter", Name = "GetUserSearchFilter")]
+        public async Task<IActionResult> GetUserSearchFilter(int id) {
+            UserSearchFilter userSearchFilter;
+            if (id == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                 userSearchFilter = await _repo.GetUserSearchFilter(id);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+            
+            var userSearchFilterToReturn = _mapper.Map<UserSearchFilterForReturnDTO>(userSearchFilter);
+            return Ok (userSearchFilterToReturn);
+        }
+
+        [HttpPut("{id}/searchFilter", Name = "UpdateUserSearchFilter")]
+        public async Task<IActionResult> UpdateUserSearchFilter(int id, [FromBody]UserSearchFilterForUpdateDTO userSearchFilterForUpdate)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            return Unauthorized();
+
+            var userSearchFilterFromRepo = await _repo.GetUserSearchFilter(id);
+            _mapper.Map(userSearchFilterForUpdate, userSearchFilterFromRepo);
+
+            if(await _repo.SaveAll())
+            {
+            return Ok(userSearchFilterForUpdate);
+            }
+
+            throw new Exception($"Updating user search filter with id {id} failed on save");
+        }
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDTO userForUpdateDto)

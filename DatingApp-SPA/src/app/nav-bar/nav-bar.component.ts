@@ -40,6 +40,7 @@ logout()
 {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
+  localStorage.removeItem('searchFilter');
   this.authService.decodedToken = null;
   this.authService.currentUser = null;
   this.alertify.message('Logged out');

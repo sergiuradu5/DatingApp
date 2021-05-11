@@ -5,7 +5,8 @@ import { User } from '../../_models/user';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
-import { UserParams } from 'src/app/_models/user-params';
+import { UserSearchFilter } from 'src/app/_models/user-search-filter';
+import { UserSearchParams } from 'src/app/_models/user-search-params';
 
 @Component({
   selector: 'app-member-list',
@@ -18,7 +19,7 @@ export class MemberListComponent implements OnInit {
   currentUser: User;
   user: User = JSON.parse(localStorage.getItem('user'));
   genderList = [{value: 'male', display: 'Males'}, {value: 'female', display: 'Females'}, {value: 'other', display: 'Other' }];
-  userParams: UserParams;
+  userSearchFilter: UserSearchFilter;
   pagination: Pagination;
   showNonVisitedMembers: boolean = true;
 
@@ -30,8 +31,8 @@ export class MemberListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.userService.currentUserParams.subscribe(data => {
-      this.userParams = data;
+    this.userService.currentUserSearchFilter.subscribe(data => {
+      this.userSearchFilter = data;
      })
      
     this.route.data.subscribe(data => {
@@ -44,11 +45,6 @@ export class MemberListComponent implements OnInit {
    
   }
 
-  resetFilters()
-  {
-    this.userService.resetUserParams();
-    this.loadUsers();
-  }
 
   // pageChanged(event: any) : void {
   //   this.pagination.currentPage = event.page;
@@ -62,6 +58,7 @@ export class MemberListComponent implements OnInit {
     this.users.forEach((user,index)=>{
       if(user.id==userId)  {
         this.users.splice(index, 1);
+        this.pagination.totalItems -= 1;
       }
     })
     console.log("Users: ", this.users);
@@ -72,7 +69,14 @@ export class MemberListComponent implements OnInit {
   }
 
   loadNextUsersAndConcatenate() {
-    this.userService.getUsers(this.pagination.currentPage+1, this.pagination.itemsPerPage, this.userParams, "", true)
+    let userParams : UserSearchParams = {
+      pageNumber: this.pagination.currentPage+1,
+      pageSize: this.pagination.itemsPerPage,
+      likers: false,
+      likees: false,
+      showNonVisitedMembers: true
+    };
+    this.userService.getUsers(userParams, this.userSearchFilter)
     .subscribe((res: PaginatedResult<User[]>) => {
       this.users = [...this.users, ...res.result];
       this.pagination = res.pagination;
@@ -83,7 +87,14 @@ export class MemberListComponent implements OnInit {
   }
 
   loadUsers() {
-    this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams, "", true)
+    let userParams : UserSearchParams = {
+      pageNumber: this.pagination.currentPage,
+      pageSize: this.pagination.itemsPerPage,
+      likers: false,
+      likees: false,
+      showNonVisitedMembers: true
+    };
+    this.userService.getUsers(userParams, this.userSearchFilter)
     .subscribe((res: PaginatedResult<User[]>) => {
       this.users = res.result;
       this.currentUser = this.users[0];

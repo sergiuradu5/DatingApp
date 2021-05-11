@@ -95,44 +95,44 @@ namespace DatingApp.API.Data
         }
         /* This Method will be using paging -> instead of retreiving all the data at once
         data is separated / divided into pages */
-        public async Task<PagedList<User>> GetUsers(UsersParams usersParams) {
+        public async Task<PagedList<User>> GetUsers(UserParams usersParams, UserSearchFilter userSearchFilter) {
 
-            var users = _context.Users.Where(u => u.Id != usersParams.UserId)
+            var users = _context.Users.Where(u => u.Id != userSearchFilter.UserId)
             .OrderByDescending(u => u.LastActive ).AsQueryable();
-            users = users.Where(u => u.Id != usersParams.UserId);
+            users = users.Where(u => u.Id != userSearchFilter.UserId);
 
-            users = users.Where( u => u.Gender == usersParams.Gender);
+            users = users.Where( u => u.Gender == userSearchFilter.Gender);
 
             if (usersParams.ShowNonVisitedMembers)
             {
                 
-                var visitedMembers = await GetVisitedUsers(usersParams.UserId);
+                var visitedMembers = await GetVisitedUsers(userSearchFilter.UserId);
                 users = users.Where(u => !visitedMembers.Contains(u.Id));
             }
 
             if(usersParams.Likers)
             {
-                var userLikers = await GetUserLikes(usersParams.UserId, usersParams.Likers);
+                var userLikers = await GetUserLikes(userSearchFilter.UserId, usersParams.Likers);
                 users = users.Where(u => userLikers.Contains(u.Id));
             }
 
             if(usersParams.Likees)
             {
-                var userLikees = await GetUserLikes(usersParams.UserId, usersParams.Likers);
+                var userLikees = await GetUserLikes(userSearchFilter.UserId, usersParams.Likers);
                 users = users.Where(u => userLikees.Contains(u.Id));
             }
 
-            if(usersParams.MinAge != 18 || usersParams.MaxAge != 99)
+            if(userSearchFilter.MinAge != 18 || userSearchFilter.MaxAge != 99)
             {
-                var minDob = DateTime.Today.AddYears(-usersParams.MaxAge -1 );
-                var maxDob = DateTime.Today.AddYears(-usersParams.MinAge);
+                var minDob = DateTime.Today.AddYears(-userSearchFilter.MaxAge -1 );
+                var maxDob = DateTime.Today.AddYears(-userSearchFilter.MinAge);
 
                 users = users.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <=maxDob);
             }
 
-            if(!string.IsNullOrEmpty(usersParams.OrderBy))
+            if(!string.IsNullOrEmpty(userSearchFilter.OrderBy))
             {
-                switch (usersParams.OrderBy)
+                switch (userSearchFilter.OrderBy)
                 {
                     case "created":
                     users = users.OrderByDescending(u=> u.Created);
@@ -146,6 +146,13 @@ namespace DatingApp.API.Data
             return await PagedList<User>.CreateAsync(users, usersParams.PageNumber, 
             usersParams.PageSize);
         }
+        //Getting the UserSearchFilter of the user from the database via the User Id
+        public async Task<UserSearchFilter> GetUserSearchFilter(int id) {
+            var userSearchFilter = await _context.UserSearchFilters.FirstOrDefaultAsync(u => u.UserId == id);
+            
+           return userSearchFilter;
+        }
+
         //Private method for returning the Likers or Likees
         private async Task<IEnumerable<int>> GetUserLikes(int id, bool likers)
         {

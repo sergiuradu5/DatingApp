@@ -17,6 +17,7 @@ import { PhotosForModerationResolver } from './_resolver/photos-for-moderation.r
 import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
 import { SettingsComponent } from './settings/settings.component';
+import { SettingsResolver } from './_resolver/settings.resolver';
 
 export const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -29,7 +30,7 @@ export const appRoutes: Routes = [
       
       { path: 'members/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver} },
       { path: 'member/edit', component: MemberEditComponent , resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges]},
-      { path: 'member/settings', component: SettingsComponent},
+      { path: 'member/settings', component: SettingsComponent, resolve: {searchFilter: SettingsResolver}},
       { path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver} },
       { path: 'matches', component: MatchesComponent, resolve: {users: MatchesResolver } },
       { path: 'admin', component: AdminPanelComponent, resolve: {photos: PhotosForModerationResolver}, data: {roles: ['Admin', 'Moderator'] } }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DatingApp.API.Models;
@@ -8,11 +9,11 @@ namespace DatingApp.API.Data
 {
     public class Seed
     {
-        public static void SeedUser(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public static void SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager, DataContext context)
         {
             if (!userManager.Users.Any())
             {
-                var userData = System.IO.File.ReadAllText("Data/UserSeedData.json");
+                var userData = System.IO.File.ReadAllText("Data/UserSeedDataExtended.json");
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);
 
                 //create some roles
@@ -29,13 +30,38 @@ namespace DatingApp.API.Data
                      roleManager.CreateAsync(role).Wait();
                      //To make an async method syncronous, just add Wait()
                 }
+                String gender = "";
+
 
                 foreach(var user in users)
                 {
                     user.Photos.SingleOrDefault().IsApproved = true;
                     userManager.CreateAsync(user, "password").Wait();
                     userManager.AddToRoleAsync(user, "Member");
+
+                    if (user.Gender == "male") {
+                    gender = "female";
+                    }
+                    if (user.Gender == "female") {
+                        gender = "male";
+                    }
+                    if (user.Gender == "other") {
+                        gender = "other";
+                    }
+
+                    var defaultUserSearchFilter = new UserSearchFilter{
+                    
+                        UserId = user.Id,
+                        Gender = gender,
+                        MinAge = 18,
+                        MaxAge = 99,
+                        OrderBy = "lastActive"
+                    };
+
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<UserSearchFilter> entityEntry = context.UserSearchFilters.Add(defaultUserSearchFilter);
                  }
+                context.SaveChanges();
+                
                 // create admin user
                 var adminUser = new User
                 {
