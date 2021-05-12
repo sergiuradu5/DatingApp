@@ -10,13 +10,13 @@
   
     <ul *ngIf="loggedIn()" class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="router-link-active">
-        <a class="nav-link" [routerLink]="['/matches']" alt="Matches"> <i class="fa fa-heart fa-lg"></i></a>
+        <a class="nav-link" [routerLink]="['/matches']" alt="Matches"> <i class="fa fa-heart fa-2x"></i></a>
       </li>
       <li class="nav-item" routerLinkActive="router-link-active">
-        <a class="nav-link" [routerLink]="['/members']"> <i class="fa fa-user fa-lg"> </i> </a>
+        <a class="nav-link" [routerLink]="['/members']"> <i class="fa fa-user fa-2x"> </i> </a>
       </li>
       <li class="nav-item" routerLinkActive="router-link-active">
-        <a class="nav-link" [routerLink]="['/messages']"    tabindex="-1" ><i class="fa fa-envelope fa-lg"> </i></a>
+        <a class="nav-link" [routerLink]="['/messages']"    tabindex="-1" ><i class="fa fa-envelope fa-2x"> </i></a>
       </li>
       <li *appHasRole="['Admin', 'Moderator']" class="nav-item" routerLinkActive="router-link-active">
         <a class="nav-link" [routerLink]="['/admin']" >Admin</a>
@@ -25,11 +25,13 @@
 
 <!-- Dropdown Menu-->
     <div *ngIf="loggedIn()" class="dropdown" dropdown>
+      <a class="dropdown-toggle text-light" dropdownToggle aria-controls="dropdown-animated">
       <span>
         <img src="{{photoUrl || '../../../../assets/user.png'}}" class="img-avatar mr-2" alt="">
       </span>
-      <a class="dropdown-toggle text-light" dropdownToggle aria-controls="dropdown-animated">
+      <span class="welcome-message">
         Welcome {{this.authService.decodedToken?.unique_name | titlecase}}!
+      </span>
       </a>
     
     

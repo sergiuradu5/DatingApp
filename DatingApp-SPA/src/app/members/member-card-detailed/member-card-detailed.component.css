@@ -1,21 +1,22 @@
-
-
 .card {
-    /* box-shadow: 4px 4px 9px 5px rgba(0, 0, 0, 0.2); */
     border: 2px solid #ccc;
     border-radius: 4%;
     overflow: hidden;
     cursor: pointer;
-    /* grid-column-start: 1;
-    grid-row-start: 1; */
-}
-/* .card:hover img {
-    
+    position: relative;
 }
 
-.card img {
-    
-} */
+.card:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  box-shadow: 2px 2px 8px rgb(213, 213, 213);
+}
+
 
 .card-img-wrapper {
     overflow: hidden;
@@ -25,29 +26,42 @@
 
 .member-icons {
     position: absolute;
-    bottom: -30%;
+    bottom: 0;
     left: 0;
     right: 0;
     margin-right: auto;
     margin-left: auto;
-    opacity: 0;
     z-index: 10000;
 }
+
+.card-img-wrapper:hover .member-icons {
+    bottom: 0;
+    opacity: 1;
+}
+
+
 
 .member-icon {
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     transform: scale(1);
-    transition: all 0.3s ease-out;
+    transition: transform 0.3s ease-out;
 }
 
 .member-icon:hover {
    transform: scale(1.1) 
 }
 
-.card-img-wrapper:hover .member-icons {
-    bottom: 0;
-    opacity: 1;
+
+@media (min-width: 768px) {
+    .member-icons {
+    bottom: -30%;
+    opacity: 0;
+    }
+    .card-img-wrapper:hover .member-icons {
+        bottom: 0;
+        opacity: 1;
+    }
 }
 
 .animate {

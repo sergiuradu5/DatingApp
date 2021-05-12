@@ -1,15 +1,19 @@
+.navbar {
+    padding: 0.2rem 1rem;
+}
+
 .dropdown-toggle, .dropdown-item {
     cursor: pointer;
     text-decoration: none;
 }
 img.img-avatar {
-    max-height: 50px;
+    max-height: 75px;
     border: 2px solid white;
     display: inline;
 }
 
 img.img-logo {
-    max-height: 50px;
+    max-height: 75px;
     display: inline;
 }
 
@@ -17,8 +21,45 @@ img.img-logo {
     font-size: 1rem;
     color: white;
     margin: 0 auto;
+    width: fit-content;
 }
 
 .img-logo {
     margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .welcome-message {
+        display: none;
+    }
+    .dropdown-menu {
+        position: absolute;
+        right: 200px;
+    }
+    .navbar-nav {
+        display: flex;
+        width: 35%;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        margin: 0 !important;
+    }
+    .navbar-logo {
+        margin: 0 !important;
+    }
+
+    img.img-avatar { 
+        width: 75px;
+    }
+    .navbar-app-name {
+        display: none;
+    }
+    img.img-logo {
+        max-height: 75px;
+        
+    }
+    .navbar {
+        padding: 0.72rem 1rem;
+    }
+    
 }

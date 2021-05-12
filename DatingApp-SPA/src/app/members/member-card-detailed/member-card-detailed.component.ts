@@ -5,7 +5,8 @@ import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from './keyframes';
-import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation } from 'ngx-gallery';
+import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize } from 'ngx-gallery';
+import { HostListener } from "@angular/core";
 
 @Component({
   selector: 'app-member-card-detailed',
@@ -26,7 +27,13 @@ export class MemberCardDetailedComponent implements OnInit {
   galleryImages: NgxGalleryImage[];
   showGalleryArrows: boolean;
   animationState: string;
-  
+  cardImageWidth: string;
+
+  onResize(event?) {
+    if (window.innerWidth <= 505) {
+        // this.adjustCardImageSizeForMobile(window.innerWidth);
+     }
+    }
   @Input() user: User;
   @Output() skipCurrentUser = new EventEmitter();
 
@@ -38,16 +45,43 @@ export class MemberCardDetailedComponent implements OnInit {
 
   ngOnInit() {
     this.showGalleryArrows = this.user.photos.length > 1;
+    
     this.galleryOptions = [
       {
-        width: '507px',
-        height: '507px',
+        width: '607px',
+        height: '607px',
+        imageSize: NgxGalleryImageSize.Cover,
         imagePercent: 100,
         imageAnimation: NgxGalleryAnimation.Slide,
         imageArrows: this.showGalleryArrows,
+        imageArrowsAutoHide : false,
         thumbnails: false,
-        preview: false
+        preview: false,
+        arrowNextIcon: 'fa fa-angle-right fa-2x',
+        arrowPrevIcon: 'fa fa-angle-left fa-2x'
+      },
+      {
+        breakpoint: 605,
+        width: '400px',
+        height: '500px',
+        imagePercent: 80,
+        imageArrowsAutoHide : false,
+        imageArrows: this.showGalleryArrows,
+        arrowNextIcon: 'fa fa-angle-right fa-2x',
+        arrowPrevIcon: 'fa fa-angle-left fa-2x'
+      },
+      {
+        breakpoint: 405,
+        width: '330px',
+        height: '430px',
+        imagePercent: 80,
+        imageArrowsAutoHide : false,
+        imageArrows: this.showGalleryArrows,
+        arrowNextIcon: 'fa fa-angle-right fa-2x',
+        arrowPrevIcon: 'fa fa-angle-left fa-2x'
+        
       }
+
     ];
     this.galleryImages =this.getImages();
   }
@@ -71,6 +105,7 @@ export class MemberCardDetailedComponent implements OnInit {
     }
     return imageUrls;
   }
+
 
   startAnimation(state) {
     console.log(state)
