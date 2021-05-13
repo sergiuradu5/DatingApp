@@ -1,0 +1,10 @@
+.side-drawer {
+    display: none;
+    position: fixed;
+    z-index: 101;
+    top: 0;
+    right: 0;
+    background: white;
+    width: 80%;
+    height: 100vh;
+  }

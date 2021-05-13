@@ -71,15 +71,14 @@ export class MemberCardDetailedComponent implements OnInit {
         arrowPrevIcon: 'fa fa-angle-left fa-2x'
       },
       {
-        breakpoint: 405,
-        width: '330px',
-        height: '430px',
+        breakpoint: 410,
+        width: '310px',
+        height: '410px',
         imagePercent: 80,
         imageArrowsAutoHide : false,
         imageArrows: this.showGalleryArrows,
         arrowNextIcon: 'fa fa-angle-right fa-2x',
         arrowPrevIcon: 'fa fa-angle-left fa-2x'
-        
       }
 
     ];

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-primary">
   <div class="container collapse navbar-collapse">
-    <div class="navbar-logo mr-4">
+    <div class="navbar-logo">
       <a class="" [routerLink]="['/home']">
         <img src="../../assets/caminder-logo.png" class="img-logo">
         <h2 class="navbar-app-name"> Căminder </h2>
@@ -8,7 +8,7 @@
     </div>
 
   
-    <ul *ngIf="loggedIn()" class="navbar-nav mr-auto">
+    <ul *ngIf="loggedIn()" class="navbar-nav ">
       <li class="nav-item" routerLinkActive="router-link-active">
         <a class="nav-link" [routerLink]="['/matches']" alt="Matches"> <i class="fa fa-heart fa-2x"></i></a>
       </li>
@@ -25,7 +25,7 @@
 
 <!-- Dropdown Menu-->
     <div *ngIf="loggedIn()" class="dropdown" dropdown>
-      <a class="dropdown-toggle text-light" dropdownToggle aria-controls="dropdown-animated">
+      <a class="dropdown-toggle text-light" (click)="toggleSideDrawer()" dropdownToggle aria-controls="dropdown-animated">
       <span>
         <img src="{{photoUrl || '../../../../assets/user.png'}}" class="img-avatar mr-2" alt="">
       </span>
@@ -53,4 +53,5 @@
     </form>
   
   </div>
+  <app-side-drawer></app-side-drawer>
 </nav>

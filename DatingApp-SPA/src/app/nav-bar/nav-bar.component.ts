@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
 import {Router} from '@angular/router';
-
+import { SideDrawerComponent } from '../side-drawer/side-drawer/side-drawer.component';
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -12,6 +12,7 @@ export class NavBarComponent implements OnInit {
   isMenuCollapsed : boolean;
   model: any={};
   photoUrl: string;
+  sideDrawer: SideDrawerComponent;
   constructor(public authService: AuthService,
             private alertify: AlertifyService,
             private router: Router
@@ -45,6 +46,12 @@ logout()
   this.authService.currentUser = null;
   this.alertify.message('Logged out');
   this.router.navigate(['/home']);
+}
+
+
+toggleSideDrawer() {
+  console.log('SideDrawer toggled from the navbar');
+  this.sideDrawer.toggleSideDrawer();
 }
 
 }

@@ -15,6 +15,9 @@
     border-top: none;
 }
 
+ngx-slider {
+  width: 400px ;
+}
 
 
 // We need to use ::ng-deep to overcome view encapsulation
@@ -62,5 +65,12 @@
   
     .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
       background: rgb(0, 120, 155);
+    }
+  }
+
+  
+  @media (max-width: 500px) {
+    ngx-slider {
+      width: 170px ;
     }
   }

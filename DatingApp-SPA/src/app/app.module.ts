@@ -52,6 +52,7 @@ import { LearnMoreComponent } from './learn-more/learn-more.component';
 import { MemberCardDetailedComponent } from './members/member-card-detailed/member-card-detailed.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsResolver } from './_resolver/settings.resolver';
+import { SideDrawerComponent } from './side-drawer/side-drawer/side-drawer.component';
 
 
 
@@ -88,6 +89,7 @@ export function tokenGetter() {
       LearnMoreComponent,
       MemberCardDetailedComponent,
       SettingsComponent,
+      SideDrawerComponent,
    ],
    imports: [
       BrowserModule,
