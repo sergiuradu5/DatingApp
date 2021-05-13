@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import {appRoutes} from './routes';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import {MatSidenavModule } from '@angular/material/sidenav';
 
 
 import { AppComponent } from './app.component';
@@ -108,6 +109,7 @@ export function tokenGetter() {
       RouterModule.forRoot(appRoutes),
       FileUploadModule,
       ReactiveFormsModule,
+      MatSidenavModule,
       JwtModule.forRoot({
             config: {
                tokenGetter: tokenGetter,

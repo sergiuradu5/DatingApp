@@ -25,7 +25,7 @@
 
 <!-- Dropdown Menu-->
     <div *ngIf="loggedIn()" class="dropdown" dropdown>
-      <a class="dropdown-toggle text-light" (click)="toggleSideDrawer()" dropdownToggle aria-controls="dropdown-animated">
+      <a class="dropdown-toggle text-light" (click)="toggleSideDrawerEvent()" dropdownToggle aria-controls="dropdown-animated">
       <span>
         <img src="{{photoUrl || '../../../../assets/user.png'}}" class="img-avatar mr-2" alt="">
       </span>
@@ -34,13 +34,6 @@
       </span>
       </a>
     
-    
-      <div class="dropdown-menu mt-3" *dropdownMenu role="menu" aria-labelledby="button-animated">
-        <a class="dropdown-item" [routerLink]="['/member/edit']"  ><i class="fa fa-user"> </i> Edit Profile</a>
-        <!-- <div class="dropdown-divider"> </div> -->
-        <a class="dropdown-item" [routerLink]="['/member/settings']"  ><i class="fa fa-cog"> </i> Settings</a>
-        <a class="dropdown-item"  (click)="logout()"> <i class="fa fa-sign-out" > </i> Logout</a>
-      </div>
     </div>
 
 
@@ -53,5 +46,4 @@
     </form>
   
   </div>
-  <app-side-drawer></app-side-drawer>
 </nav>

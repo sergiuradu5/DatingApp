@@ -6,7 +6,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from './keyframes';
 import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize } from 'ngx-gallery';
-import { HostListener } from "@angular/core";
+
 
 @Component({
   selector: 'app-member-card-detailed',
@@ -87,7 +87,6 @@ export class MemberCardDetailedComponent implements OnInit {
 
   getImages() {
     const imageUrls = [];
-    console.log('[getImages()] Passed User: ', this.user);
     imageUrls.push({
       small: this.user.photoUrl,
       medium: this.user.photoUrl,

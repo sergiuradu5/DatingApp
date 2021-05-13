@@ -5,12 +5,9 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   templateUrl: './learn-more.component.html',
   styleUrls: ['./learn-more.component.css']
 })
-export class LearnMoreComponent implements OnInit {
+export class LearnMoreComponent {
   @Output() backToHome = new EventEmitter();
   constructor() { }
-
-  ngOnInit() {
-  }
 
   backToHomeFunction()
   {

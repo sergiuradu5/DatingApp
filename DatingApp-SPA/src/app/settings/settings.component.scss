@@ -16,7 +16,7 @@
 }
 
 ngx-slider {
-  width: 400px ;
+  width: 500px ;
 }
 
 
@@ -69,7 +69,13 @@ ngx-slider {
   }
 
   
-  @media (max-width: 500px) {
+  @media (max-width: 768px) {
+    ngx-slider {
+      width: 300px ;
+    }
+  }
+
+  @media (max-width: 406px) {
     ngx-slider {
       width: 170px ;
     }

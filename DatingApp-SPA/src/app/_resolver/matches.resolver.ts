@@ -6,6 +6,7 @@ import { AlertifyService } from '../_services/alertify.service';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UserSearchParams } from '../_models/user-search-params';
+import { UserSearchFilter } from '../_models/user-search-filter';
 
 @Injectable()
 export class MatchesResolver implements Resolve<User[]> {
@@ -27,7 +28,7 @@ export class MatchesResolver implements Resolve<User[]> {
         likees: this.likesParam === 'Likees' ? true : false,
         showNonVisitedMembers: false
       }
-        return this.userService.getUsers(userParams).pipe(
+        return this.userService.getUsers(userParams, null).pipe(
             catchError(error => {
                 this.alertify.error('Problem retreiving data');
                 this.router.navigate(['/home']);

@@ -3,6 +3,8 @@ import { AuthService } from './_services/auth.service';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { User } from './_models/user';
 import { UserService } from './_services/user.service';
+import { Router } from '@angular/router';
+import { AlertifyService } from './_services/alertify.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,8 +13,11 @@ import { UserService } from './_services/user.service';
 export class AppComponent implements OnInit {
   title = 'DatingApp-SPA';
   jwtHelper = new JwtHelperService();
+  isSideDrawerOpen = false;
   constructor(private authService: AuthService, 
-              private userService: UserService)
+              private userService: UserService,
+              private router: Router,
+              private alertify: AlertifyService)
   {
     
   }
@@ -34,5 +39,27 @@ export class AppComponent implements OnInit {
         localStorage.setItem('searchFilter',JSON.stringify(data));
       })
     }
+  }
+
+  loggedIn()
+  {
+    return this.authService.loggedIn();
+  }
+
+  logout()
+  {
+    this.toggleSideDrawer(false);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('searchFilter');
+    this.authService.decodedToken = null;
+    this.authService.currentUser = null;
+    this.alertify.message('Logged out');
+    this.router.navigate(['/home']);
+  }
+
+  toggleSideDrawer(toggleValue: boolean) {
+      this.isSideDrawerOpen = toggleValue;
+    
   }
 }

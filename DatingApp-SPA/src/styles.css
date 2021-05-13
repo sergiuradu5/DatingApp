@@ -41,8 +41,10 @@ body::-webkit-scrollbar-thumb {
   background-color: #ccc;
 }
 
+
+
 .footer{  
-    background-color: #eb6864;;
+    background-color: #eb6864;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -88,5 +90,12 @@ body::-webkit-scrollbar-thumb {
     border-top: 1px solid #eee;
     padding: 15px 0;
   }
+
+  @media (max-width: 768px) {
+    .footer {
+      font-size: 12px;
+    }
+  }
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -30,19 +30,17 @@ namespace DatingApp.API.Controllers {
             var userFromRepo = await _repo.GetOtherUser(currentUserId);
             var userParams = _mapper.Map<UserParams>(userParamsAndSearchFilterFromQuery);
             var userSearchFilter = await _repo.GetUserSearchFilter(currentUserId);
-            
-            
 
-            if(string.IsNullOrEmpty(userSearchFilter.Gender))
+            if(string.IsNullOrEmpty(userParamsAndSearchFilterFromQuery.Gender))
             {
-                if(userFromRepo.Gender == "male")
-                userSearchFilter.Gender = "female";
+                // if(userSearchFilter.Gender == "male")
+                // userSearchFilter.Gender = "female";
 
-                if(userFromRepo.Gender == "female")
-                userSearchFilter.Gender = "male";
+                // if(userSearchFilter.Gender == "female")
+                // userSearchFilter.Gender = "male";
 
-                if(userFromRepo.Gender == "other")
-                userSearchFilter.Gender = "other";
+                // if(userSearchFilter.Gender == "other")
+                // userSearchFilter.Gender = "other";
 
                 userSearchFilter.MinAge = 18;
                 userSearchFilter.MaxAge = 99;

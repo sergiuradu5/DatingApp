@@ -7,13 +7,13 @@
     text-decoration: none;
 }
 img.img-avatar {
-    max-height: 75px;
+    max-width: 65px;
     border: 2px solid white;
     display: inline;
 }
 
 img.img-logo {
-    max-height: 75px;
+    max-height: 65px;
     display: inline;
 }
 
@@ -48,16 +48,7 @@ img.img-logo {
     .navbar-app-name {
         display: none;
     }
-    .navbar {
-        padding: 0.72rem 1rem;
-    }
-    img.img-avatar { 
-        width: 75px;
-    }
-    
-    img.img-logo {
-        max-height: 75px;
-    }
+  
     .navbar-nav {
         transform: translateX(0);
     }
@@ -75,18 +66,11 @@ img.img-logo {
         width: 40%;
         margin: 0 !important;
     }
-    img.img-avatar { 
-        width: 75px;
-    }
-    
-    img.img-logo {
-        max-height: 75px;
-    } 
 }
 
 @media (max-width: 410px) {
     img.img-avatar { 
-        width: 55px;
+        width: 50px;
     }
     
     img.img-logo {
