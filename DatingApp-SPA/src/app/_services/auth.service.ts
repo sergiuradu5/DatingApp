@@ -6,6 +6,7 @@ import {map} from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { User } from '../_models/user';
 import { UserService } from './user.service';
+import { UserSearchFilter } from '../_models/user-search-filter';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,14 +15,18 @@ export class AuthService {
   jwtHelper = new JwtHelperService();
   decodedToken: any;
   currentUser: User;
+
   photoUrl = new BehaviorSubject<string>('../../assets/user.png'); //For ANY to ANY Comunication 
   currentPhotoUrl = this.photoUrl.asObservable();
+
+  localStorageUserSearchFilter: UserSearchFilter;
   
   constructor(private http: HttpClient, private userService: UserService) { }
 
   changeMemberPhoto(photoUrl: string) {
     this.photoUrl.next(photoUrl);
   }
+
 
   login (model: any)
   {
@@ -35,14 +40,20 @@ export class AuthService {
           localStorage.setItem('searchFilter', JSON.stringify(user.searchFilter));
           this.decodedToken= this.jwtHelper.decodeToken(user.token);
           this.currentUser= user.user;
+          this.localStorageUserSearchFilter = user.searchFilter;
           this.changeMemberPhoto(this.currentUser.photoUrl);
-          this.userService.initiateUserSearchFilter( JSON.parse(localStorage.getItem('searchFilter')));
+          this.userService.resetUserAfterLogin(this.currentUser);
+          this.userService.initiateUserSearchFilter(this.localStorageUserSearchFilter);
+          
+          // this.userService.initiateUserSearchFilter(JSON.parse(localStorage.getItem('searchFilter')));
           
           
         }
       })
     )
   }
+
+
 
   register(user : User) {
     return this.http.post(this.baseUrl + 'auth/' + 'register', user);

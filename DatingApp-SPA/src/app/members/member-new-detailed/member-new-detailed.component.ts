@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
 import { User } from 'src/app/_models/user';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
@@ -6,12 +6,13 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from '../keyframes';
 import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize } from 'ngx-gallery';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
-  selector: 'app-member-card-detailed',
-  templateUrl: './member-card-detailed.component.html',
-  styleUrls: ['./member-card-detailed.component.css'],
+  selector: 'app-member-card-new-detailed',
+  templateUrl: './member-new-detailed.component.html',
+  styleUrls: ['./member-new-detailed.component.css'],
   animations: [ 
     trigger('cardAnimator', [
       transition('* => wobble', animate(350, keyframes(kf.wobble))),
@@ -22,33 +23,39 @@ import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImag
     ])
   ]
 })
-export class MemberCardDetailedComponent implements OnInit {
+export class MemberNewDetailedComponent implements OnInit {
+  @ViewChild('scrollToTop') private myScrollContainerToTop: ElementRef;
+  @ViewChild('scrollToBottom') private myScrollContainerToBottom: ElementRef;
+  
+  @Output() skipCurrentUser = new EventEmitter();
+  user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
   showGalleryArrows: boolean;
   animationState: string;
   cardImageWidth: string;
 
-  onResize(event?) {
-    if (window.innerWidth <= 505) {
-        // this.adjustCardImageSizeForMobile(window.innerWidth);
-     }
-    }
-  @Input() user: User;
-  @Output() skipCurrentUser = new EventEmitter();
+  
+  
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    this.route.data.subscribe(data=> {
+      this.user= data['user'];
+    });
+
     this.showGalleryArrows = this.user.photos.length > 1;
     
     this.galleryOptions = [
       {
-        width: '550px',
+        image: true,
+        width: '550x',
         height: '700px',
         imageSize: NgxGalleryImageSize.Cover,
         imagePercent: 100,
@@ -83,7 +90,13 @@ export class MemberCardDetailedComponent implements OnInit {
 
     ];
     this.galleryImages =this.getImages();
+    this.scrollToBottom();
   }
+
+  ngAfterViewInit() {    
+      this.scrollToBottom();
+  }
+
 
   getImages() {
     const imageUrls = [];
@@ -104,6 +117,17 @@ export class MemberCardDetailedComponent implements OnInit {
     return imageUrls;
   }
 
+  scrollToTop() :void {
+    try {
+      this.myScrollContainerToTop.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+  } catch(err) { }
+  }
+
+  scrollToBottom(): void {
+    try {
+        this.myScrollContainerToBottom.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+    } catch(err) { }                 
+  }
 
   startAnimation(state) {
     console.log(state)
@@ -119,11 +143,7 @@ export class MemberCardDetailedComponent implements OnInit {
   
 
   skipUser() {
-    this.startAnimation('slideOutLeft');
-    setTimeout( () => {
-      this.proceedToNextUser();
-    }, 350);
-    
+    this.scrollToTop();
   }
 
   proceedToNextUser() {
@@ -142,16 +162,9 @@ export class MemberCardDetailedComponent implements OnInit {
 
   sendLike(recipientId: number)
   {
-    this.userService.sendLike(this.authService.decodedToken.nameid, recipientId).subscribe( data=> {
-      this.alertify.success('You have liked ' + this.user.knownAs);
-    }, error => {
-      this.alertify.error(error);
-    }); 
-
-    this.startAnimation('slideOutRight');
-    setTimeout(() => {
-      this.proceedToNextUser();
-    }, 350);
+    console.log('Scroll to top!');
+    this.scrollToTop();
+    
     
   }
 

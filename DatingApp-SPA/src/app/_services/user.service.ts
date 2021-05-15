@@ -33,9 +33,13 @@ export class UserService {
   // };
   localStorageUserSearchFilter : UserSearchFilter = JSON.parse(localStorage.getItem('searchFilter'));
   private userSearchFilter = new BehaviorSubject<UserSearchFilter>(this.localStorageUserSearchFilter);
+  
   currentUserSearchFilter = this.userSearchFilter.asObservable();
 
-constructor(private http: HttpClient) { }
+constructor(private http: HttpClient) {
+  console.log(`[user.service Constructor] localStorageUserSearchFilter: ${this.localStorageUserSearchFilter.toString()}
+   and private userSearchFilter: ${this.userSearchFilter}`);
+ }
 
 getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): Observable<PaginatedResult<User[]>> {
   const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
@@ -161,16 +165,17 @@ markAsRead(userId: number, messageId: number) {
   .subscribe();
 }
 
-initiateUserSearchFilter(userSearchFilter: UserSearchFilter) {
+initiateUserSearchFilter(userSearchFilter: any) {
   
   this.userSearchFilter.next(userSearchFilter);
-  console.log(`>>>>Initiating user search filter with localStorage.get('searchFilter'): `, userSearchFilter)
+  console.log(`>>>>Initiating user search filter with localStorage.get('searchFilter'): `, this.currentUserSearchFilter)
 }
 
 updateUserSearchFilter(userId: number, userSearchFilter: UserSearchFilter) {
   const headers = new HttpHeaders()
   .set('Content-Type', 'application/json')
   .set('Access-Control-Allow-Origin', '*');
+  this.userSearchFilter.next(userSearchFilter);
   this.http.put(this.baseUrl + 'users/' + userId + '/searchFilter', userSearchFilter)
     .subscribe(data => {
       localStorage.removeItem('searchFilter');
@@ -210,4 +215,11 @@ resetUserSearchFilter(id: number) {
 getUserSearchFilter(id: number): Observable<UserSearchFilter> {
   return this.http.get<UserSearchFilter>(this.baseUrl + 'users/' + id + '/searchFilter');
   }
+resetUserAfterLogout() {
+  this.user = null;
+}
+
+resetUserAfterLogin(user: User) {
+  this.user = user;
+}
 }

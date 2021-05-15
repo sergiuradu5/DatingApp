@@ -43,12 +43,14 @@
           	<tab heading="About {{user?.knownAs}}">
               <h4>Description</h4>
               <p>{{user.introduction}}</p>
-              <h4>Looking For</h4>
+              <p *ngIf="!user.introduction" class="text-muted"> User has not provided a description</p>
+              <h4 *ngIf="user.lookingFor">Looking For</h4>
               <p>{{user.lookingFor}}</p>
             </tab>
             <tab heading="Interests">
               <h4>Interests</h4>
               <p>{{user.interests}}</p>
+              <p *ngIf="!user.interests" class="text-muted"> User hast not provided personal interests</p>
             </tab>
             <tab heading="Photos">
               <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>

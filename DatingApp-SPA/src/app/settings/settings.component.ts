@@ -36,8 +36,9 @@ export class SettingsComponent implements OnInit {
     // this.route.data.subscribe(data => {
     //   this.userSearchFilter = data['searchFilter'].result;
     // });
-    this.userService.currentUserSearchFilter.subscribe(data => {
-      this.userSearchFilter = data;
+    this.userService.currentUserSearchFilter.subscribe(userSearchFilter => {
+      this.userSearchFilter = userSearchFilter;
+      console.log(`[SettingsComponent] ngOnInit() this.userSearchFilter: `, this.userSearchFilter);
     })
   }
 

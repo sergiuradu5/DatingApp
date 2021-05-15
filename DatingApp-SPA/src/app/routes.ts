@@ -14,6 +14,7 @@ import { MatchesResolver } from './_resolver/matches.resolver';
 import { MessagesResolver } from './_resolver/messages.resolver';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { PhotosForModerationResolver } from './_resolver/photos-for-moderation.resolver';
+import { MemberNewDetailedComponent } from './members/member-new-detailed/member-new-detailed.component';
 import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -28,10 +29,14 @@ export const appRoutes: Routes = [
     children: [
       { path: 'messages', component: MessagesComponent, resolve: {messages: MessagesResolver} },
       
-      { path: 'members/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver} },
+      
       { path: 'member/edit', component: MemberEditComponent , resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges]},
       { path: 'member/settings', component: SettingsComponent, resolve: {searchFilter: SettingsResolver}},
-      { path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver} },
+      { path: 'members', children: [
+         { path: '', component: MemberListComponent, resolve: {users: MemberListResolver}},
+         { path: ':id', component: MemberNewDetailedComponent, resolve: {user: MemberDetailResolver} },
+      ] },
+      { path: 'matches/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver} },
       { path: 'matches', component: MatchesComponent, resolve: {users: MatchesResolver } },
       { path: 'admin', component: AdminPanelComponent, resolve: {photos: PhotosForModerationResolver}, data: {roles: ['Admin', 'Moderator'] } }
        
