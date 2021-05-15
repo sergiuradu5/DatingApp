@@ -47,6 +47,7 @@ namespace DatingApp.API.Data
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
+                
             });
             
             builder.Entity<Like>()
@@ -102,6 +103,7 @@ namespace DatingApp.API.Data
  	entity.Property(m => m.NormalizedEmail).HasMaxLength(85); 
  	entity.Property(m => m.NormalizedUserName).HasMaxLength(85); 
  	entity.Property(m => m.UserName).HasMaxLength(85); 
+    
     }); 
     builder.Entity<Role>(entity => { 
         entity.Property(m => m.Name).HasMaxLength(85); 

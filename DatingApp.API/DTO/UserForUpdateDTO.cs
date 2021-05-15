@@ -1,3 +1,5 @@
+using System;
+
 namespace DatingApp.API.DTO
 {
     public class UserForUpdateDTO
@@ -11,5 +13,6 @@ namespace DatingApp.API.DTO
         public string City   { get; set; }
 
         public string Country { get; set; }
+        public string Gender { get; set; }
     }
 }

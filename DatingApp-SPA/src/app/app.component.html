@@ -2,11 +2,13 @@
 <mat-sidenav-container>
     
     <mat-sidenav *ngIf="loggedIn()" [(opened)]="isSideDrawerOpen" position="end">
-        <div class="text-light d-flex flex-column justify-content-center align-items-flex-start mt-3 ml-5"  >
-            <a class="sidenav-item" [routerLink]="['/member/edit']" (click)="toggleSideDrawer(false)" ><i class="fa fa-user fa-lg"> </i> Edit Profile</a>
+        <div class="text-light d-flex flex-column justify-content-center align-items-flex-start"  >
+            <a class="sidenav-item" [routerLink]="['/member/edit']" (click)="toggleSideDrawer(false)" >
+                    <i class="fa fa-user fa-lg"> </i> <h5 class="sidenav-item-text"> Edit Profile </h5 >                
+            </a>
             <!-- <div class="dropdown-divider"> </div> -->
-            <a class="sidenav-item" [routerLink]="['/member/settings']" (click)="toggleSideDrawer(false)" ><i class="fa fa-cog fa-lg"> </i> Settings</a>
-            <a class="sidenav-item"  (click)="logout()"> <i class="fa fa-sign-out fa-lg" > </i> Logout</a>
+            <a class="sidenav-item" [routerLink]="['/member/settings']" (click)="toggleSideDrawer(false)" ><i class="fa fa-cog fa-lg"> </i> <h5 class="sidenav-item-text">Settings</h5 ></a>
+            <a class="sidenav-item"  (click)="logout()"> <i class="fa fa-sign-out fa-lg" > </i> <h5 class="sidenav-item-text">Logout</h5 ></a>
           </div>
     </mat-sidenav>
     <mat-sidenav-content>

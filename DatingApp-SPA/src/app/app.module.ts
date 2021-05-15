@@ -54,6 +54,7 @@ import { MemberCardDetailedComponent } from './members/member-card-detailed/memb
 import { SettingsComponent } from './settings/settings.component';
 import { SettingsResolver } from './_resolver/settings.resolver';
 import { SideDrawerComponent } from './side-drawer/side-drawer/side-drawer.component';
+import { DeleteModalComponent } from './members/member-edit/delete-modal/delete-modal.component';
 
 
 
@@ -91,6 +92,7 @@ export function tokenGetter() {
       MemberCardDetailedComponent,
       SettingsComponent,
       SideDrawerComponent,
+      DeleteModalComponent,
    ],
    imports: [
       BrowserModule,

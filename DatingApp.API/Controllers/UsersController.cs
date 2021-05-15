@@ -9,6 +9,7 @@ using System.Security.Claims;
 using DatingApp.API.Helpers;
 using System;
 using DatingApp.API.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace DatingApp.API.Controllers {
     [ServiceFilter(typeof(LogUserActivity))]
@@ -18,9 +19,11 @@ namespace DatingApp.API.Controllers {
     public class UsersController : ControllerBase {
         private readonly IDatingRepository _repo;
         private readonly IMapper _mapper;
-        public UsersController (IDatingRepository repo, IMapper mapper) {
+        private readonly UserManager<User> _userManager;
+        public UsersController (IDatingRepository repo, IMapper mapper, UserManager<User> userManager) {
             _mapper = mapper;
             _repo = repo;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -116,8 +119,15 @@ namespace DatingApp.API.Controllers {
             var userFromRepo = await _repo.GetOwnUser(id);
             _mapper.Map(userForUpdateDto, userFromRepo);
 
+            // User user;
+            // UserForDetailedDTO userToReturn;
+
             if(await _repo.SaveAll())
-            return NoContent();
+            {
+               var user = await _repo.GetOwnUser(id);
+               var userToReturn = _mapper.Map<UserForDetailedDTO>(user);
+                return Ok(userToReturn);
+            }
 
             throw new Exception($"Updating user {id} failed on save");
         }
@@ -177,6 +187,24 @@ namespace DatingApp.API.Controllers {
                 return Ok();
             
             return BadRequest( "Failed to visit user");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id) 
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            return Unauthorized();
+
+            var userFromRepo = await _repo.GetOwnUser(id);
+            
+            _repo.Delete(userFromRepo);
+
+            if (await _repo.SaveAll()) {
+                return Ok();
+            }
+            
+            return BadRequest( "Failed to delete user");
+
         }
 
 

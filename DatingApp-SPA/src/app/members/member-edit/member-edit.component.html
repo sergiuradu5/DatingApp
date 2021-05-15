@@ -44,7 +44,7 @@
      
           
           <button [disabled]="!editForm.dirty" form="editForm" class="btn btn-success btn-block">Save Changes</button>
-        
+          <button class="btn btn-danger btn-block" (click)="deleteButtonClicked()">Delete Profile</button>
       </div>
     </div>
   </div>
@@ -64,7 +64,7 @@
                   <textarea name="interests" id="" cols="30" rows="6" class="form-control"
                   [(ngModel)]="user.interests"></textarea>
                   
-                  <h4>Location Details:</h4>
+                  <h4>Location Details</h4>
                   <div class="form=inline">
                     <label for="city">City</label>
                     <input name="city" type="text" class="form-control"
@@ -73,7 +73,21 @@
                     <input name="country" type="text" class="form-control"
                     [(ngModel)]="user.country">
                 
-                    </div>
+                  </div>
+
+                  <h4>Gender</h4>
+                  <div class="form-inline">
+                    <label for="gender">Gender</label>
+                      <select class="form-control ml-1" style="width: 130px" 
+                      [(ngModel)]="user.gender"
+                      id="gender" name="gender">
+                        <option *ngFor="let gender of genderList" 
+                        [value]="gender.value">
+                            {{gender.display}}
+                        </option>
+                      </select>
+                  </div>
+
                 </form>  
             </tab>
             <tab heading="Edit Photos">

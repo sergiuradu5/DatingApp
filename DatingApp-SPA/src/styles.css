@@ -91,6 +91,16 @@ body::-webkit-scrollbar-thumb {
     padding: 15px 0;
   }
 
+  .btn-danger {
+    background-color: rgb(226, 0, 0);
+    border-color: rgb(226, 0, 0);
+  }
+
+  .btn-danger:hover, .btn-danger:focus {
+    background-color:  rgb(184, 1, 1);
+    border-color: rgb(184, 1, 1);
+  }
+
   @media (max-width: 768px) {
     .footer {
       font-size: 12px;

@@ -98,6 +98,10 @@ updateUser(id: number, user: User) {
  return this.http.put(this.baseUrl + 'users/' + id, user);
 }
 
+deleteUser(id) :Observable<User> {
+  return this.http.delete<User>(this.baseUrl + 'users/' + id);
+}
+
 setMainPhoto(userId: number, id: number)
 {
   return this.http.post(this.baseUrl + 'users/' + userId + '/photos/' + id + '/setMain', {});

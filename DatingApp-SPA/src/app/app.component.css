@@ -1,6 +1,23 @@
 mat-sidenav-container {
     height: calc(100vh - 88.38px - 56px); 
   }
+  
+  mat-sidenav div {
+    margin-top: 35px;
+    margin-left: 40px;
+  }
+
+.sidenav-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.sidenav-item-text {
+  font-size: 18px;
+  margin-left: 0.5rem;
+  margin-bottom: 0;
+}
 
   @media (max-width: 991px) {
     mat-sidenav-container {

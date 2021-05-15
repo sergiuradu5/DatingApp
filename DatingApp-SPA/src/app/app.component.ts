@@ -54,6 +54,7 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('searchFilter');
     this.authService.decodedToken = null;
     this.authService.currentUser = null;
+    this.userService.currentUserSearchFilter = null;
     this.alertify.message('Logged out');
     this.router.navigate(['/home']);
   }
