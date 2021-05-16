@@ -6,6 +6,9 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from '../keyframes';
 import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize } from 'ngx-gallery';
+import { Observable, Subscription } from 'rxjs';
+import { ActionService } from 'src/app/_services/action.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -28,6 +31,7 @@ export class MemberCardDetailedComponent implements OnInit {
   showGalleryArrows: boolean;
   animationState: string;
   cardImageWidth: string;
+  actionToPerform: string;
 
   onResize(event?) {
     if (window.innerWidth <= 505) {
@@ -40,10 +44,15 @@ export class MemberCardDetailedComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private alertify: AlertifyService
-  ) { }
+    private alertify: AlertifyService,
+    private actionService: ActionService,
+    private router: Router
+  ) { 
+    
+  }
 
   ngOnInit() {
+
     this.showGalleryArrows = this.user.photos.length > 1;
     
     this.galleryOptions = [
@@ -83,6 +92,16 @@ export class MemberCardDetailedComponent implements OnInit {
 
     ];
     this.galleryImages =this.getImages();
+
+    this.actionService.currentActionToPerform.subscribe(action => {
+      if (action === "skip") {
+        this.skipUser();
+      }
+      if (action === "like") {
+        this.sendLike(this.user.id);
+      }
+    })
+
   }
 
   getImages() {
@@ -153,6 +172,10 @@ export class MemberCardDetailedComponent implements OnInit {
       this.proceedToNextUser();
     }, 350);
     
+  }
+
+  viewMoreDetails(userId: number) {
+    this.router.navigate(['members/', userId]);
   }
 
 }

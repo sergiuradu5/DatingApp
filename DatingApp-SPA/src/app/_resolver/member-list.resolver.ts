@@ -14,6 +14,7 @@ export class MemberListResolver implements Resolve<User[]> {
   pageNumber = 1;
   pageSize = 4;
   userSearchFilter: UserSearchFilter;
+  actionOnUserFromRoute : string;
   constructor(
     private userService: UserService,
     private router: Router,

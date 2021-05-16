@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../_services/user.service';
 import { AlertifyService } from '../../_services/alertify.service';
 import { User } from '../../_models/user';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { UserSearchFilter } from 'src/app/_models/user-search-filter';
 import { UserSearchParams } from 'src/app/_models/user-search-params';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-member-list',
@@ -22,12 +23,17 @@ export class MemberListComponent implements OnInit {
   userSearchFilter: UserSearchFilter;
   pagination: Pagination;
   showNonVisitedMembers: boolean = true;
+  actionOnUserFromRoute : any; //It is an object that contains the "action" property, which is either skip or like
+  actionEventToMemberCard: Subject<string> = new Subject<string>();
 
  
   constructor(private userService: UserService,
           private alertify: AlertifyService,
-          private route: ActivatedRoute)
-          { }
+          private route: ActivatedRoute,
+          private router: Router
+          )
+          {            
+           }
 
   ngOnInit() {
 
@@ -41,16 +47,13 @@ export class MemberListComponent implements OnInit {
       this.pagination = data['users'].pagination;
       this.showNonVisitedMembers = true;
     });
-
-   
+    this.route.params.subscribe(params => {
+      this.actionOnUserFromRoute = params['action'];
+    });
+    
+    
   }
-
-
-  // pageChanged(event: any) : void {
-  //   this.pagination.currentPage = event.page;
-  //   this.loadUsers();
-  // }
-
+  
   
 
   skipCurrentUser(userId: number) {

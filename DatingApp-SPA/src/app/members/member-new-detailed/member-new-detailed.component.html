@@ -5,10 +5,10 @@
                 <div class="card-user-photos">
                     <ngx-gallery #scrollToTop class="card-img-top" [options]="galleryOptions" [images]="galleryImages"> </ngx-gallery>
                     <ul class="list-inline member-icons animate text-center">
-                        <button class="btn-md btn-primary ml-3 mr-3 member-icon" (click)="skipUser()"> <i class="fa fa-times-circle fa-3x"></i></button>
+                        <!-- <button class="btn-md btn-primary ml-3 mr-3 member-icon" (click)="skipUser()"> <i class="fa fa-times-circle fa-3x"></i></button> -->
                         <button class="btn-md btn-primary ml-3 mr-3 member-icon"
-                        [routerLink]="['/members/', user.id]"> <i class="fa fa-user fa-3x"></i></button>
-                        <button class="btn-md btn-primary ml-3 mr-3 member-icon" (click)="sendLike(user.id)"> <i class="fa fa-heart fa-3x"></i></button>
+                        (click)="navigateBack()"> <i class="fa fa-arrow-up fa-3x"></i></button>
+                        <!-- <button class="btn-md btn-primary ml-3 mr-3 member-icon" (click)="sendLike(user.id)"> <i class="fa fa-heart fa-3x"></i></button> -->
                     </ul>
                 </div>
             
@@ -30,25 +30,29 @@
                         <i class="fa fa-user-circle"></i> Member Since {{ user.created | date: 'mediumDate' }}
                     </div>
 
-                    <div *ngIf="user.introduction" class="mb-2 text-center">
+                    <div *ngIf="!isStringEmpty(user.introduction)" class="mb-2 text-center">
                         <strong>Description</strong>
                         <div class="text-left">
                             <p>{{user.introduction}}</p>
                         </div>
                     </div>
 
-                    <div *ngIf="user.lookingFor" class="mb-2 text-center"> 
+                    <div *ngIf="!isStringEmpty(user.lookingFor)" class="mb-2 text-center"> 
                         <strong>Looking For</strong>
                         <div class="text-left">
                             <p>{{user.lookingFor}}</p>
                         </div>
                     </div>
 
-                    <div *ngIf="user.interests" class="mb-4 text-center" #scrollToBottom> 
+                    <div *ngIf="!isStringEmpty(user.interests)" class="mb-4 text-center"> 
                         <strong>Interests</strong>
                         <div class="text-left">
                             <p>{{user.interests}}</p>
                         </div>
+                    </div>
+
+                    <div class="card-user-info-end" #scrollToBottom>
+
                     </div>
 
                     

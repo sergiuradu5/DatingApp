@@ -57,11 +57,16 @@ import { SideDrawerComponent } from './side-drawer/side-drawer/side-drawer.compo
 import { DeleteModalComponent } from './members/member-edit/delete-modal/delete-modal.component';
 import { MemberNewDetailedComponent } from './members/member-new-detailed/member-new-detailed.component';
 
+import * as Hammer from 'hammerjs';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 
 
 
-
-
+export class MyHammerConfig extends HammerGestureConfig {
+   overrides = <any> {
+      'swipe': {direction: Hammer.DIRECTION_ALL}
+   }
+}
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -94,7 +99,7 @@ export function tokenGetter() {
       SettingsComponent,
       SideDrawerComponent,
       DeleteModalComponent,
-      MemberNewDetailedComponent,
+      MemberNewDetailedComponent
    ],
    imports: [
       BrowserModule,
@@ -134,7 +139,11 @@ export function tokenGetter() {
       MessagesResolver,
       AdminService,
       PhotosForModerationResolver,
-      SettingsResolver
+      SettingsResolver,
+      {
+         provide: HAMMER_GESTURE_CONFIG,
+         useClass: MyHammerConfig
+      }
    ],
    entryComponents: [
       RolesModalComponent

@@ -1,9 +1,9 @@
 .member-new-detailed {
     box-sizing: content-box;
+    position: relative;
     width: 550px;
     height: 769px;
-    position: relative;
-    
+    overflow: scroll;
 }
 
 
@@ -14,23 +14,26 @@
 .card {
     border: 2px solid #ccc;
     border-radius: 4%;
-    overflow: scroll;
+    
     cursor: pointer;
     position: relative;
+}
+
+.card-content {
 }
 
 .card-content,
 .card-user-photos {
     position: relative;
+    
 }
 .card-user-photos {
     overflow: hidden;
+    
 }
 
 .card-body {
     z-index: 9999999;
-    height: fit-content;
-    width: 100%;
 }
 
 .card-title {
@@ -81,6 +84,20 @@
     .card-content:hover .member-icons {
         bottom: 0;
         opacity: 1;
+    }
+}
+
+@media (max-width: 605px) {
+    .member-new-detailed {
+        width: 400px;
+        height: 569px;
+    }
+}
+
+@media (max-width: 410px) {
+    .member-new-detailed {
+        width: 310px;
+        height: 479px;
     }
 }
 

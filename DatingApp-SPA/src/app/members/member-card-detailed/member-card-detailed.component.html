@@ -2,19 +2,20 @@
     [@cardAnimator]="animationState" 
     (@cardAnimator.done)="resetAnimationState()"
     (swipeleft)="skipUser()"
-    (swiperight)="sendLike(user.id)">
+    (swiperight)="sendLike(user.id)"
+    (swipeup)="viewMoreDetails(user.id)">
     <div class="card-img-wrapper">
       <ngx-gallery class="card-img-top" [options]="galleryOptions" [images]="galleryImages"> </ngx-gallery>
         <ul class="list-inline member-icons animate text-center">
           <button class="btn-md btn-primary ml-3 mr-3 member-icon" (tap)="skipUser()"> <i class="fa fa-times-circle fa-3x"></i></button>
           <button class="btn-md btn-primary ml-3 mr-3 member-icon"
-          [routerLink]="['/members/', user.id]"> <i class="fa fa-user fa-3x"></i></button>
+          [routerLink]="['/members/', user.id]"> <i class="fa fa-arrow-down fa-3x"></i></button>
           <button class="btn-md btn-primary ml-3 mr-3 member-icon" (tap)="sendLike(user.id)"> <i class="fa fa-heart fa-3x"></i></button>
         </ul>
 
       
       
-      </div>
+    </div>
       <div class="card-body p-1">
         <h6 class="card-title text-center mb-1"> {{user.knownAs}}, {{user.age}} 
         </h6>

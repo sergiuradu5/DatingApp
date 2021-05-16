@@ -37,8 +37,6 @@ export class UserService {
   currentUserSearchFilter = this.userSearchFilter.asObservable();
 
 constructor(private http: HttpClient) {
-  console.log(`[user.service Constructor] localStorageUserSearchFilter: ${this.localStorageUserSearchFilter.toString()}
-   and private userSearchFilter: ${this.userSearchFilter}`);
  }
 
 getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): Observable<PaginatedResult<User[]>> {

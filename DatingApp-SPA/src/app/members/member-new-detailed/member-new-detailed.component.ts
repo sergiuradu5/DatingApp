@@ -6,8 +6,9 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from '../keyframes';
 import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize } from 'ngx-gallery';
-import { ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { ActionService } from 'src/app/_services/action.service';
+import {isEmpty} from 'src/app/_helpers/isEmpty';
 
 @Component({
   selector: 'app-member-card-new-detailed',
@@ -42,7 +43,9 @@ export class MemberNewDetailedComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private alertify: AlertifyService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private actionService: ActionService
   ) { }
 
   ngOnInit() {
@@ -71,7 +74,7 @@ export class MemberNewDetailedComponent implements OnInit {
         breakpoint: 605,
         width: '400px',
         height: '500px',
-        imagePercent: 80,
+        imagePercent: 100,
         imageArrowsAutoHide : false,
         imageArrows: this.showGalleryArrows,
         arrowNextIcon: 'fa fa-angle-right fa-2x',
@@ -81,7 +84,7 @@ export class MemberNewDetailedComponent implements OnInit {
         breakpoint: 410,
         width: '310px',
         height: '410px',
-        imagePercent: 80,
+        imagePercent: 100,
         imageArrowsAutoHide : false,
         imageArrows: this.showGalleryArrows,
         arrowNextIcon: 'fa fa-angle-right fa-2x',
@@ -140,10 +143,24 @@ export class MemberNewDetailedComponent implements OnInit {
     this.animationState = '';
   }
 
-  
+  navigateBack() {
+    this.scrollToTop();
+    setTimeout(() => {
+    this.router.navigate(['/members']);
+    },350);
+  }
+
+  isStringEmpty(string) {
+    return isEmpty(string);
+  }
 
   skipUser() {
+    let action = "skip";
     this.scrollToTop();
+    setTimeout(() => {
+      this.router.navigate(['/members']);
+      this.actionService.emitActionToPerform(action);
+    }, 300);
   }
 
   proceedToNextUser() {
