@@ -77,7 +77,8 @@ export class MemberListComponent implements OnInit {
       pageSize: this.pagination.itemsPerPage,
       likers: false,
       likees: false,
-      showNonVisitedMembers: true
+      showNonVisitedMembers: true, 
+      withDetails: true
     };
     this.userService.getUsers(userParams, this.userSearchFilter)
     .subscribe((res: PaginatedResult<User[]>) => {
@@ -95,7 +96,8 @@ export class MemberListComponent implements OnInit {
       pageSize: this.pagination.itemsPerPage,
       likers: false,
       likees: false,
-      showNonVisitedMembers: true
+      showNonVisitedMembers: true,
+      withDetails: true
     };
     this.userService.getUsers(userParams, this.userSearchFilter)
     .subscribe((res: PaginatedResult<User[]>) => {

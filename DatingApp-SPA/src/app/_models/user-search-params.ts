@@ -4,4 +4,5 @@ pageSize? : number;
 likees?: boolean;
 likers? : boolean;
 showNonVisitedMembers? : boolean;
+withDetails?: boolean;
 }

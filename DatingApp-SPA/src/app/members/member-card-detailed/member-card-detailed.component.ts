@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { User } from 'src/app/_models/user';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from '../keyframes';
-import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize } from 'ngx-gallery';
+import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize, NgxGalleryComponent } from 'ngx-gallery';
 import { Observable, Subscription } from 'rxjs';
 import { ActionService } from 'src/app/_services/action.service';
 import { Router } from '@angular/router';
-
+import * as helpers from 'src/app/_helpers/isEmpty';
 
 @Component({
   selector: 'app-member-card-detailed',
@@ -32,14 +32,17 @@ export class MemberCardDetailedComponent implements OnInit {
   animationState: string;
   cardImageWidth: string;
   actionToPerform: string;
+  startIndexOfPhoto: number;
+  isGalleryIntoView: boolean;
 
-  onResize(event?) {
-    if (window.innerWidth <= 505) {
-        // this.adjustCardImageSizeForMobile(window.innerWidth);
-     }
-    }
+  
+  @ViewChild('gallery') gallery: NgxGalleryComponent;
+  @ViewChild('scrollToTop')  myScrollContainerToTop: ElementRef;
+  @ViewChild('scrollToBottom')  myScrollContainerToBottom: ElementRef;
+  @ViewChild('memberCardDetailed') memberCardDetailedContainer: ElementRef;
   @Input() user: User;
   @Output() skipCurrentUser = new EventEmitter();
+  
 
   constructor(
     private authService: AuthService,
@@ -57,6 +60,7 @@ export class MemberCardDetailedComponent implements OnInit {
     
     this.galleryOptions = [
       {
+        startIndex: 0,
         width: '550px',
         height: '700px',
         imageSize: NgxGalleryImageSize.Cover,
@@ -93,16 +97,8 @@ export class MemberCardDetailedComponent implements OnInit {
     ];
     this.galleryImages =this.getImages();
 
-    this.actionService.currentActionToPerform.subscribe(action => {
-      if (action === "skip") {
-        this.skipUser();
-      }
-      if (action === "like") {
-        this.sendLike(this.user.id);
-      }
-    })
-
   }
+
 
   getImages() {
     const imageUrls = [];
@@ -123,6 +119,30 @@ export class MemberCardDetailedComponent implements OnInit {
     return imageUrls;
   }
 
+  isElementXPercentInViewport (el, percentVisible) {
+    let
+      rect = el.getBoundingClientRect(),
+      windowHeight = (window.innerHeight || document.documentElement.clientHeight);
+  
+    return !(
+      Math.floor(100 - (((rect.top >= 0 ? 0 : rect.top) / +-rect.height) * 100)) < percentVisible ||
+      Math.floor(100 - ((rect.bottom - windowHeight) / rect.height) * 100) < percentVisible
+    )
+  };
+
+  scrollToTheTop() {
+      this.myScrollContainerToTop.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+  }
+
+  scrollToTheBottom() {
+    console.log("scrollToBottom");
+        this.myScrollContainerToBottom.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+                   
+  }
+
+  isStringEmpty(str) {
+    return helpers.isEmpty(str);
+  }
 
   startAnimation(state) {
     console.log(state)
@@ -138,6 +158,7 @@ export class MemberCardDetailedComponent implements OnInit {
   
 
   skipUser() {
+    this.actionService.resetStartIndexOfMainCard();
     this.startAnimation('slideOutLeft');
     setTimeout( () => {
       this.proceedToNextUser();
@@ -147,6 +168,7 @@ export class MemberCardDetailedComponent implements OnInit {
 
   proceedToNextUser() {
     this.skipCurrentUser.emit(this.user.id);
+    this.actionService.resetStartIndexOfMainCard;
     this.visitUser(this.user.id);
   }
 
@@ -161,21 +183,22 @@ export class MemberCardDetailedComponent implements OnInit {
 
   sendLike(recipientId: number)
   {
+    this.actionService.resetStartIndexOfMainCard;
     this.userService.sendLike(this.authService.decodedToken.nameid, recipientId).subscribe( data=> {
       this.alertify.success('You have liked ' + this.user.knownAs);
     }, error => {
       this.alertify.error(error);
     }); 
-
+    
     this.startAnimation('slideOutRight');
+    
     setTimeout(() => {
       this.proceedToNextUser();
+      
     }, 350);
     
   }
 
-  viewMoreDetails(userId: number) {
-    this.router.navigate(['members/', userId]);
-  }
+  
 
 }

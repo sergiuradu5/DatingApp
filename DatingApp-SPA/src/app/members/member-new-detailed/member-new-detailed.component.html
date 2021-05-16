@@ -3,7 +3,7 @@
         <div class="card member-new-detailed mb-4" >
             <div class="card-content" #scrollToTop>
                 <div class="card-user-photos">
-                    <ngx-gallery #scrollToTop class="card-img-top" [options]="galleryOptions" [images]="galleryImages"> </ngx-gallery>
+                    <ngx-gallery #gallery #scrollToTop (change)="onImageChange($event)" class="card-img-top" [options]="galleryOptions" [images]="galleryImages"> </ngx-gallery>
                     <ul class="list-inline member-icons animate text-center">
                         <!-- <button class="btn-md btn-primary ml-3 mr-3 member-icon" (click)="skipUser()"> <i class="fa fa-times-circle fa-3x"></i></button> -->
                         <button class="btn-md btn-primary ml-3 mr-3 member-icon"

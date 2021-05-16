@@ -57,6 +57,7 @@ import { SideDrawerComponent } from './side-drawer/side-drawer/side-drawer.compo
 import { DeleteModalComponent } from './members/member-edit/delete-modal/delete-modal.component';
 import { MemberNewDetailedComponent } from './members/member-new-detailed/member-new-detailed.component';
 
+
 import * as Hammer from 'hammerjs';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 

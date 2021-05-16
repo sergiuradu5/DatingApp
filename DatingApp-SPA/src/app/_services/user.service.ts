@@ -65,6 +65,10 @@ getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): O
     params = params.append('showNonVisitedMembers', 'true');
   }
 
+  if (userParams.withDetails) {
+    params = params.append('withDetails', 'true');
+  }
+
   if(userSearchFilter != null)
   { 
     // userSearchFilterForBody.minAge = userSearchFilter.minAge;
@@ -75,6 +79,7 @@ getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): O
     params = params.append('maxAge', userSearchFilter.maxAge.toString());
     params = params.append('gender', userSearchFilter.gender);
     params = params.append('orderBy', userSearchFilter.orderBy);
+    
   }
 
   return this.http.get<User[]>(this.baseUrl + 'users', {observe: 'response', params,})

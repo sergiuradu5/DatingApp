@@ -32,10 +32,7 @@ export const appRoutes: Routes = [
       
       { path: 'member/edit', component: MemberEditComponent , resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges]},
       { path: 'member/settings', component: SettingsComponent, resolve: {searchFilter: SettingsResolver}},
-      { path: 'members', children: [
-         { path: '', component: MemberListComponent, resolve: {users: MemberListResolver}},
-         { path: ':id', component: MemberNewDetailedComponent, resolve: {user: MemberDetailResolver} },
-      ] },
+      { path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver}},
       { path: 'matches/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver} },
       { path: 'matches', component: MatchesComponent, resolve: {users: MatchesResolver } },
       { path: 'admin', component: AdminPanelComponent, resolve: {photos: PhotosForModerationResolver}, data: {roles: ['Admin', 'Moderator'] } }

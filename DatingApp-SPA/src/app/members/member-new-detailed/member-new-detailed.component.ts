@@ -5,10 +5,12 @@ import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from '../keyframes';
-import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize } from 'ngx-gallery';
+import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize, NgxGalleryAction, NgxGalleryHelperService } from 'ngx-gallery';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActionService } from 'src/app/_services/action.service';
 import {isEmpty} from 'src/app/_helpers/isEmpty';
+import { NgxGalleryComponent } from 'ngx-gallery-9';
+
 
 @Component({
   selector: 'app-member-card-new-detailed',
@@ -25,16 +27,21 @@ import {isEmpty} from 'src/app/_helpers/isEmpty';
   ]
 })
 export class MemberNewDetailedComponent implements OnInit {
+ @ViewChild('gallery') gallery: NgxGalleryComponent;
   @ViewChild('scrollToTop') private myScrollContainerToTop: ElementRef;
   @ViewChild('scrollToBottom') private myScrollContainerToBottom: ElementRef;
-  
+
+  @Input() user: User;
   @Output() skipCurrentUser = new EventEmitter();
-  user: User;
+  
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
+  galleryActions: NgxGalleryHelperService;
   showGalleryArrows: boolean;
   animationState: string;
   cardImageWidth: string;
+  startIndexOfPhoto: number;
+  
 
   
   
@@ -49,15 +56,17 @@ export class MemberNewDetailedComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.data.subscribe(data=> {
-      this.user= data['user'];
-    });
+
+    this.actionService.currentStartIndexOfMainCard.subscribe(index => {
+      this.startIndexOfPhoto = index;
+    })
 
     this.showGalleryArrows = this.user.photos.length > 1;
     
     this.galleryOptions = [
       {
         image: true,
+        startIndex: this.startIndexOfPhoto,
         width: '550x',
         height: '700px',
         imageSize: NgxGalleryImageSize.Cover,
@@ -120,6 +129,11 @@ export class MemberNewDetailedComponent implements OnInit {
     return imageUrls;
   }
 
+  onImageChange(event) {
+    console.log('onImageChange, event: ', event);
+    this.actionService.changeStartIndexOfMainCard(event.index);
+  }
+
   scrollToTop() :void {
     try {
       this.myScrollContainerToTop.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
@@ -143,11 +157,13 @@ export class MemberNewDetailedComponent implements OnInit {
     this.animationState = '';
   }
 
-  navigateBack() {
-    this.scrollToTop();
+  navigateBack() {    
+      this.scrollToTop();
     setTimeout(() => {
-    this.router.navigate(['/members']);
-    },350);
+      this.actionService.changeStartIndexOfMainCard(this.startIndexOfPhoto);
+      console.log("startIndexOfPhoto: ", this.startIndexOfPhoto);
+      this.router.navigate(['/members']);
+    }, 350);
   }
 
   isStringEmpty(string) {
@@ -156,11 +172,11 @@ export class MemberNewDetailedComponent implements OnInit {
 
   skipUser() {
     let action = "skip";
-    this.scrollToTop();
+      this.scrollToTop();
     setTimeout(() => {
       this.router.navigate(['/members']);
-      this.actionService.emitActionToPerform(action);
-    }, 300);
+      
+    }, 350);
   }
 
   proceedToNextUser() {
@@ -179,9 +195,11 @@ export class MemberNewDetailedComponent implements OnInit {
 
   sendLike(recipientId: number)
   {
-    console.log('Scroll to top!');
     this.scrollToTop();
-    
+    setTimeout(() => {
+      this.router.navigate(['/members']);
+      
+    }, 350);
     
   }
 
