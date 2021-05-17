@@ -12,7 +12,7 @@ import { UserService } from '../_services/user.service';
 export class NavBarComponent implements OnInit {
   @Input() isSideDrawerOpen: boolean;
   @Output() toggleSideDrawer = new EventEmitter();
-  isMenuCollapsed : boolean;
+  
   model: any={};
   photoUrl: string;
   

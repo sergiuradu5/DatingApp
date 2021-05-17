@@ -58,6 +58,7 @@ namespace DatingApp.API.Controllers {
 
             if (userParamsAndSearchFilterFromQuery.WithDetails)
             {
+                
                 var usersToReturnDetailed = _mapper.Map<IEnumerable<UserForDetailedDTO>>(users);
                 return Ok(usersToReturnDetailed);
             }

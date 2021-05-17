@@ -5,18 +5,28 @@ mat-sidenav-container {
   mat-sidenav div {
     margin-top: 35px;
     margin-left: 40px;
+    margin-right: 30px;
+    overflow:visible;
   }
+
+ 
 
 .sidenav-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  transform: scale(1);
+  transition: all 0.3s;
 }
 .sidenav-item-text {
   font-size: 18px;
   margin-left: 0.5rem;
   margin-bottom: 0;
+}
+
+.sidenav-item:hover {
+  transform: scale(1.1);
 }
 
   @media (max-width: 991px) {

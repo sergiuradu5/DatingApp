@@ -1,6 +1,9 @@
 .navbar {
     padding: 0.2rem 1rem;
+    z-index: 999999;
 }
+
+
 
 .dropdown-toggle, .dropdown-item {
     cursor: pointer;
@@ -36,6 +39,16 @@ img.img-logo {
         justify-content: space-around;
         align-items: center;
         transform: translateX(24%);
+        
+}
+
+.nav-item {
+    transform: scale(1);
+    transition: all 0.3s;
+}
+
+.nav-item:hover {
+    transform: scale(1.1);
 }
 
 @media (max-width: 991.11px) {

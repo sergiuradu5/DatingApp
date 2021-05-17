@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using DatingApp.API.Helpers;
+using System.ComponentModel.DataAnnotations.Schema;
+using AutoMapper.Configuration.Annotations;
 
 namespace DatingApp.API.Models
 {
@@ -18,6 +20,9 @@ namespace DatingApp.API.Models
         public string  Interests { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
+        //Property that hold whether the member the current user is looking at has already liked the user
+        [NotMapped]
+        public bool HasLikedCurrentUser {get; set; } = false;
         public virtual ICollection<Photo> Photos { get; set; }
 
         public virtual ICollection<Like> Likers{ get; set; }

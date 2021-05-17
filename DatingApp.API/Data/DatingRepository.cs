@@ -130,6 +130,16 @@ namespace DatingApp.API.Data
                 users = users.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <=maxDob);
             }
 
+            var userLikersForProperty = await GetUserLikes(userSearchFilter.UserId, true);                
+
+            foreach (var user in users) {
+                if (userLikersForProperty.Contains(user.Id)) {
+                    user.HasLikedCurrentUser = true;
+                } else {
+                    user.HasLikedCurrentUser = false;
+                }
+            }
+
             if(!string.IsNullOrEmpty(userSearchFilter.OrderBy))
             {
                 switch (userSearchFilter.OrderBy)
