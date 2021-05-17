@@ -23,6 +23,8 @@ namespace DatingApp.API.Models
         //Property that hold whether the member the current user is looking at has already liked the user
         [NotMapped]
         public bool HasLikedCurrentUser {get; set; } = false;
+        [NotMapped]
+        public bool HasMatchedCurrentUser {get; set; } = false;
         public virtual ICollection<Photo> Photos { get; set; }
 
         public virtual ICollection<Like> Likers{ get; set; }

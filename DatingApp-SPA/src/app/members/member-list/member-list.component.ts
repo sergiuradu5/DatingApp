@@ -23,9 +23,9 @@ export class MemberListComponent implements OnInit {
   userSearchFilter: UserSearchFilter;
   pagination: Pagination;
   showNonVisitedMembers: boolean = true;
-  actionOnUserFromRoute : any; //It is an object that contains the "action" property, which is either skip or like
-  actionEventToMemberCard: Subject<string> = new Subject<string>();
 
+  showItIsAMatch : boolean = false;
+  userLikedForItIsAMatch: any;
  
   constructor(private userService: UserService,
           private alertify: AlertifyService,
@@ -47,11 +47,6 @@ export class MemberListComponent implements OnInit {
       this.pagination = data['users'].pagination;
       this.showNonVisitedMembers = true;
     });
-    this.route.params.subscribe(params => {
-      this.actionOnUserFromRoute = params['action'];
-    });
-    
-    
   }
   
   
@@ -108,5 +103,23 @@ export class MemberListComponent implements OnInit {
       this.alertify.error(error);
     });
   }
+
+  startItIsAMatch(event) {
+    if (event !== null) {
+    
+    this.userLikedForItIsAMatch = event;
+    
+    this.showItIsAMatch = true;
+    console.log('[member-list] startItIsAMatch, userLiked and showItIsAMatch', this.userLikedForItIsAMatch, this.showItIsAMatch);
+    }
+  }
+
+  resetUserLiked(event) {
+    console.log('[member-list] resetUserLiked');
+    this.userLikedForItIsAMatch = null;
+    this.showItIsAMatch = false;
+  }
+
+
 
 }

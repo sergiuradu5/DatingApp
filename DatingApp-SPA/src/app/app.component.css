@@ -6,10 +6,8 @@ mat-sidenav-container {
     margin-top: 35px;
     margin-left: 40px;
     margin-right: 30px;
-    overflow:visible;
+    overflow-x:visible;
   }
-
- 
 
 .sidenav-item {
   display: flex;
@@ -48,7 +46,8 @@ mat-sidenav-container {
   }
 
   mat-sidenav-content {
-    overflow: overlay;
+    overflow-y: overlay;
+    overflow-x: hidden;
   }
 
   mat-sidenav-content::-webkit-scrollbar {

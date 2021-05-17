@@ -15,7 +15,7 @@ import { UserSearchParams } from '../_models/user-search-params';
 export class MatchesComponent implements OnInit {
   users: User[];
   pagination: Pagination;
-  likesParam: string;
+  likersOrMatchesParam: string;
 
   constructor(
     private authService: AuthService,
@@ -31,7 +31,7 @@ export class MatchesComponent implements OnInit {
       this.users = data['users'].result;
       this.pagination = data['users'].pagination;
     });
-    this.likesParam = 'Likers';
+    this.likersOrMatchesParam = 'Likers';
   }
 
   pageChanged(event: any) : void {
@@ -44,8 +44,9 @@ export class MatchesComponent implements OnInit {
     let userParams : UserSearchParams = {
       pageNumber: this.pagination.currentPage,
       pageSize: this.pagination.itemsPerPage,
-      likers: this.likesParam === 'Likers' ? true : false,
-      likees: this.likesParam === 'Likees' ? true : false,
+      likers: this.likersOrMatchesParam === 'Likers' ? true : false,
+      likees: false,
+      showMatches: this.likersOrMatchesParam === 'Matches' ? true : false,
       showNonVisitedMembers: false
     }
     this.userService.getUsers(userParams)

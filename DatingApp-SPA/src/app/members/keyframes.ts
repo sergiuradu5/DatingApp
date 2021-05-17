@@ -9,6 +9,11 @@ export const wobble = [
     style({transform: 'none', offset: 1})
 ]
 
+export const zoomIn = [
+    style({transform: 'scale3d(0.3, 0.3, 0.3)', opacity: '0', offset: 0}),
+    style({ opacity: '1', offset: 0.5})
+]
+
 export const jello = [
     // style({transform: 'none', offset: .111}),
     style({transform: 'skewX(-12.5deg) skewY(-12.5deg)', offset: .111}),

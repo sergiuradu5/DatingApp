@@ -17,4 +17,5 @@ export interface User {
     photos?: Photo[];
     roles?: string[];
     hasLikedCurrentUser?: boolean;
+    hasMatchedCurrentUser?: boolean;
 }

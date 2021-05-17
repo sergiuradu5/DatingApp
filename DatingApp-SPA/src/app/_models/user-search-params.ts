@@ -5,4 +5,5 @@ likees?: boolean;
 likers? : boolean;
 showNonVisitedMembers? : boolean;
 withDetails?: boolean;
+showMatches? : boolean;
 }

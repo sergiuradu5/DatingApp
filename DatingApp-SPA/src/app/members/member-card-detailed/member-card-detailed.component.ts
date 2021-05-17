@@ -16,12 +16,10 @@ import * as helpers from 'src/app/_helpers/isEmpty';
   templateUrl: './member-card-detailed.component.html',
   styleUrls: ['./member-card-detailed.component.css'],
   animations: [ 
-    trigger('cardAnimator', [
-      transition('* => wobble', animate(350, keyframes(kf.wobble))),
-      transition('* => flipOutY', animate(350, keyframes(kf.flipOutY))),
+    trigger('cardAnimator', [      
       transition('* => slideOutLeft', animate(350, keyframes(kf.slideOutLeft))),
       transition('* => slideOutRight', animate(350, keyframes(kf.slideOutRight))),
-      transition('* => swing', animate(350, keyframes(kf.swing))),
+      
     ])
   ]
 })
@@ -42,6 +40,7 @@ export class MemberCardDetailedComponent implements OnInit {
   @ViewChild('memberCardDetailed') memberCardDetailedContainer: ElementRef;
   @Input() user: User;
   @Output() skipCurrentUser = new EventEmitter();
+  @Output() userLikedForItIsAMatch = new EventEmitter<any>();
   
 
   constructor(
@@ -119,17 +118,6 @@ export class MemberCardDetailedComponent implements OnInit {
     return imageUrls;
   }
 
-  isElementXPercentInViewport (el, percentVisible) {
-    let
-      rect = el.getBoundingClientRect(),
-      windowHeight = (window.innerHeight || document.documentElement.clientHeight);
-  
-    return !(
-      Math.floor(100 - (((rect.top >= 0 ? 0 : rect.top) / +-rect.height) * 100)) < percentVisible ||
-      Math.floor(100 - ((rect.bottom - windowHeight) / rect.height) * 100) < percentVisible
-    )
-  };
-
   scrollToTheTop() {
       this.myScrollContainerToTop.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
   }
@@ -193,6 +181,17 @@ export class MemberCardDetailedComponent implements OnInit {
     this.startAnimation('slideOutRight');
     
     setTimeout(() => {
+      if (this.user.hasLikedCurrentUser) {
+        const userLiked = {
+          knownAs: this.user.knownAs,
+          photoUrl: this.user.photoUrl
+        }
+        console.log('[member-card-detailed] userLikedForItIsAMatch: ', userLiked);
+        this.userLikedForItIsAMatch.emit(userLiked); //Sending the relevant matched user data to the parent component
+      } else {
+        console.log('[member-card-detailed] userLikedForItIsAMatch: ', null);
+        this.userLikedForItIsAMatch.emit(null);
+      }
       this.proceedToNextUser();
       
     }, 350);

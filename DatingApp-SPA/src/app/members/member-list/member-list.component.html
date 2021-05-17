@@ -9,14 +9,15 @@
           <div class="card-container">
             <div  class="" *ngFor="let user of users.slice(0, users.length).reverse()"> <!--There 12 Grids in Bootstrap -->
               <!--lg for large, md medium screen, sm for small screen. The number represents how many grids an element takes up-->
-              <app-member-card-detailed [user]="user" (skipCurrentUser)="skipCurrentUser($event)"></app-member-card-detailed>
+              <app-member-card-detailed [user]="user" (skipCurrentUser)="skipCurrentUser($event)" (userLikedForItIsAMatch)="startItIsAMatch($event)"></app-member-card-detailed>
             </div>
             <div class="text-center" *ngIf="users.length === 0">
               <h1>No more users available</h1>
               <h2>Please try again later</h2>
             </div>
           </div>
-        </div>
+          <app-it-is-a-match [(show)]="showItIsAMatch" [userLiker]="user" [userLiked]="userLikedForItIsAMatch" (resetUserLiked)="resetUserLiked($event)"></app-it-is-a-match>
+</div>
 
         <!-- <div class="d-flex justify-content-center">
           <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems"

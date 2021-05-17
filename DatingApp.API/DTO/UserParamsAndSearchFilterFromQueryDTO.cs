@@ -16,6 +16,7 @@ namespace DatingApp.API.DTO
       public bool Likers { get; set; } = false;
       public bool ShowNonVisitedMembers {get; set; } = false;
       public bool WithDetails { get; set; } = false;
+      public bool ShowMatches { get; set; } = false;
 
       
       public int UserId {get; set;}

@@ -113,7 +113,8 @@ namespace DatingApp.API.Data
             if(usersParams.Likers)
             {
                 var userLikers = await GetUserLikes(userSearchFilter.UserId, usersParams.Likers);
-                users = users.Where(u => userLikers.Contains(u.Id));
+                var userLikees = await GetUserLikes(userSearchFilter.UserId, !usersParams.Likers);
+                users = users.Where(u => userLikers.Contains(u.Id) && !userLikees.Contains(u.Id));
             }
 
             if(usersParams.Likees)
@@ -130,14 +131,24 @@ namespace DatingApp.API.Data
                 users = users.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <=maxDob);
             }
 
-            var userLikersForProperty = await GetUserLikes(userSearchFilter.UserId, true);                
+            var userLikersForProperty = await GetUserLikes(userSearchFilter.UserId, true);
+            var userLikeesForProperty = await GetUserLikes(userSearchFilter.UserId, false);                  
 
             foreach (var user in users) {
                 if (userLikersForProperty.Contains(user.Id)) {
                     user.HasLikedCurrentUser = true;
+                    if (userLikeesForProperty.Contains(user.Id)) {
+                        user.HasMatchedCurrentUser = true;
+                    }
                 } else {
                     user.HasLikedCurrentUser = false;
+                    user.HasMatchedCurrentUser = false;
                 }
+
+            }
+
+            if (usersParams.ShowMatches) {
+                users = users.Where(u => userLikersForProperty.Contains(u.Id) && userLikeesForProperty.Contains(u.Id));
             }
 
             if(!string.IsNullOrEmpty(userSearchFilter.OrderBy))

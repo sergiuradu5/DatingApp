@@ -1,0 +1,12 @@
+<div class="it-is-a-match-container" [ngClass]="show ? 'on-screen' : 'off-screen' " (click)="closeComponent()">
+    <h1 class="it-is-a-match-text">It's a Match!</h1>
+    <h3 class="it-is-a-match-info"> You and {{userLiked?.knownAs}} have liked each other</h3>
+    <div class="user-photos-container">
+        <div class="user-liker-photo">
+            <img src="{{userLiker?.photoUrl}}">
+        </div>
+        <div class="user-liked-photo">
+            <img src="{{userLiked?.photoUrl}}">
+        </div>
+    </div>
+</div>

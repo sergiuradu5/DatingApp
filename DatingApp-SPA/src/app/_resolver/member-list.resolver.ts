@@ -12,7 +12,7 @@ import { UserSearchParams } from '../_models/user-search-params';
 export class MemberListResolver implements Resolve<User[]> {
 
   pageNumber = 1;
-  pageSize = 2;
+  pageSize = 4;
   userSearchFilter: UserSearchFilter;
   actionOnUserFromRoute : string;
   constructor(

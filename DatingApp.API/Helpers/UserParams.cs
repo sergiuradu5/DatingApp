@@ -14,6 +14,7 @@ namespace DatingApp.API.Helpers
       public bool Likees { get; set; } = false;
       public bool Likers { get; set; } = false;
       public bool ShowNonVisitedMembers {get; set; } = false;
+      public bool ShowMatches { get; set; } = false;
       
     }
 }
