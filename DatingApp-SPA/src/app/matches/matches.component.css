@@ -1,0 +1,10 @@
+.radio-button {
+    font-size: 1.2rem;
+    width: 100px;
+}
+
+@media (max-width: 991px) {
+.radio-buttons {
+    justify-content: center;
+}
+}

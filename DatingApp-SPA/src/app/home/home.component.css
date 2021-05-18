@@ -2,3 +2,14 @@
     width: 200px;
     height: auto;
 }
+
+.register-container {
+    min-width: 432px;
+}
+
+@media (max-width: 430px) {
+    .register-container {
+        width: 100vw;
+        min-width: fit-content;
+    }
+}

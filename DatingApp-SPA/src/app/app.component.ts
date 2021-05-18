@@ -5,6 +5,10 @@ import { User } from './_models/user';
 import { UserService } from './_services/user.service';
 import { Router } from '@angular/router';
 import { AlertifyService } from './_services/alertify.service';
+import {SignInModalComponent } from './nav-bar/sign-in-modal/sign-in-modal.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import {RolesModalComponent} from './admin/roles-modal/roles-modal.component';
+import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,11 +17,22 @@ import { AlertifyService } from './_services/alertify.service';
 export class AppComponent implements OnInit {
   title = 'DatingApp-SPA';
   jwtHelper = new JwtHelperService();
-  isSideDrawerOpen = false;
+  isSideDrawerOpen: boolean = false;
+  signInModalToggled: boolean = false;
+  bsModalRef: BsModalRef;
+  config = {
+    animated: true,
+    keyboard: true,
+    backdrop: true,
+    ignoreBackdropClick: false,
+    class: "sign-in-modal"
+  }
+
   constructor(private authService: AuthService, 
               private userService: UserService,
               private router: Router,
-              private alertify: AlertifyService)
+              private alertify: AlertifyService,
+              private modalService: BsModalService)
   {
     
   }
@@ -39,6 +54,10 @@ export class AppComponent implements OnInit {
         localStorage.setItem('searchFilter',JSON.stringify(data));
       })
     }
+
+    this.modalService.onHide.subscribe(() => {
+      this.signInModalToggled = false;
+    })
   }
 
   loggedIn()
@@ -62,6 +81,16 @@ export class AppComponent implements OnInit {
 
   toggleSideDrawer(toggleValue: boolean) {
       this.isSideDrawerOpen = toggleValue;
-    
+  }
+
+  toggleSignInModal(event) {
+    if (event) {
+      this.bsModalRef = this.modalService.show(SignInModalComponent, this.config);
+      this.signInModalToggled = true;
+      console.log('[app.component] signInModalToggled', this.signInModalToggled);
+    }
+    if (!event) {
+      this.bsModalRef.hide();
+    }
   }
 }

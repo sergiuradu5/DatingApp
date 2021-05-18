@@ -88,9 +88,25 @@ namespace DatingApp.API.Data
            return user;
         }
         //Method used when retreiving data about other users (non-approved photos do not get displayed)
-         public async Task<User> GetOtherUser (int id) {
+         public async Task<User> GetOtherUser (int userToGetId, int userRequesterId = 0) {
            var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == id);
+            .FirstOrDefaultAsync(u => u.Id == userToGetId);
+            
+            if (userRequesterId != 0) {
+
+            var userLikersForProperty = await GetUserLikes(userRequesterId, true);
+            var userLikeesForProperty = await GetUserLikes(userRequesterId, false);
+            if (userLikersForProperty.Contains(user.Id)) {
+                    user.HasLikedCurrentUser = true;
+                    if (userLikeesForProperty.Contains(user.Id)) {
+                        user.HasMatchedCurrentUser = true;
+                    }
+            } else {
+                    user.HasLikedCurrentUser = false;
+                    user.HasMatchedCurrentUser = false;
+                }
+            }
+
            return user;
         }
         /* This Method will be using paging -> instead of retreiving all the data at once
@@ -167,6 +183,9 @@ namespace DatingApp.API.Data
             return await PagedList<User>.CreateAsync(users, usersParams.PageNumber, 
             usersParams.PageSize);
         }
+
+
+        
         //Getting the UserSearchFilter of the user from the database via the User Id
         public async Task<UserSearchFilter> GetUserSearchFilter(int id) {
             var userSearchFilter = await _context.UserSearchFilters.FirstOrDefaultAsync(u => u.UserId == id);

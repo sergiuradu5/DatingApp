@@ -1,23 +1,23 @@
-<app-nav-bar [(isSideDrawerOpen)]="isSideDrawerOpen" (toggleSideDrawer)="toggleSideDrawer($event)"></app-nav-bar>
-<mat-sidenav-container>
-    
-    <mat-sidenav *ngIf="loggedIn()" [(opened)]="isSideDrawerOpen" position="end">
-        <div class="text-light d-flex flex-column justify-content-center align-items-flex-start"  >
-            <a class="sidenav-item" [routerLink]="['/member/edit']" (click)="toggleSideDrawer(false)" >
-                    <i class="fa fa-user fa-lg"> </i> <h5 class="sidenav-item-text"> Edit Profile </h5 >                
-            </a>
-            <!-- <div class="dropdown-divider"> </div> -->
-            <a class="sidenav-item" [routerLink]="['/member/settings']" (click)="toggleSideDrawer(false)" ><i class="fa fa-cog fa-lg"> </i> <h5 class="sidenav-item-text">Settings</h5 ></a>
-            <a class="sidenav-item"  (click)="logout()"> <i class="fa fa-sign-out fa-lg" > </i> <h5 class="sidenav-item-text">Logout</h5 ></a>
-          </div>
-    </mat-sidenav>
-    <mat-sidenav-content>
+<div class="app-container">
+    <app-nav-bar [(isSideDrawerOpen)]="isSideDrawerOpen" (toggleSideDrawer)="toggleSideDrawer($event)" [(signInModalToggled)]="signInModalToggled" (toggleSignInModal)="toggleSignInModal($event)"></app-nav-bar>
+    <mat-sidenav-container>
         
-        <section class="container">
-            <router-outlet></router-outlet>
-        </section>
-
-    </mat-sidenav-content>
-
-</mat-sidenav-container>
-<app-footer [isSideDrawerOpen]="isSideDrawerOpen"></app-footer>
+        <mat-sidenav *ngIf="loggedIn()" [(opened)]="isSideDrawerOpen" position="end">
+            <div class="text-light d-flex flex-column justify-content-center align-items-flex-start"  >
+                <a class="sidenav-item" [routerLink]="['/member/edit']" (click)="toggleSideDrawer(false)" >
+                        <i class="fa fa-user fa-lg"> </i> <h5 class="sidenav-item-text"> Edit Profile </h5 >                
+                </a>
+                <!-- <div class="dropdown-divider"> </div> -->
+                <a class="sidenav-item" [routerLink]="['/member/settings']" (click)="toggleSideDrawer(false)" ><i class="fa fa-cog fa-lg"> </i> <h5 class="sidenav-item-text">Settings</h5 ></a>
+                <a class="sidenav-item"  (click)="logout()"> <i class="fa fa-sign-out fa-lg" > </i> <h5 class="sidenav-item-text">Logout</h5 ></a>
+            </div>
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <div class="page-content">
+                <section class="container">
+                    <router-outlet></router-outlet>
+                </section>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

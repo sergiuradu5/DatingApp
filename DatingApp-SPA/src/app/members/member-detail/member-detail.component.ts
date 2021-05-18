@@ -41,7 +41,7 @@ export class MemberDetailComponent implements OnInit {
         thumbnailsColumns: 4,
         imageAnimation: NgxGalleryAnimation.Slide,
         preview: false
-      }
+    }
     ];
     this.galleryImages =this.getImages();
   }
@@ -65,8 +65,12 @@ export class MemberDetailComponent implements OnInit {
 
   sendLike(recipientId: number)
   {
+    this.userService.visitUser(this.authService.decodedToken.nameid, recipientId).subscribe (data => {
+      this.alertify.success('You have visited ' + this.user.knownAs);
+    })
     this.userService.sendLike(this.authService.decodedToken.nameid, recipientId).subscribe( data=> {
-      this.alertify.success('You have liked ' + this.user.knownAs);
+      this.user.hasMatchedCurrentUser = true;
+      this.alertify.success('You can now write ' + this.user.knownAs + ' a message');
     }, error => {
       this.alertify.error(error);
     }); 

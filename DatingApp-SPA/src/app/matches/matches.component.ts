@@ -31,7 +31,7 @@ export class MatchesComponent implements OnInit {
       this.users = data['users'].result;
       this.pagination = data['users'].pagination;
     });
-    this.likersOrMatchesParam = 'Likers';
+    this.likersOrMatchesParam = 'Matches';
   }
 
   pageChanged(event: any) : void {

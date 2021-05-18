@@ -42,7 +42,7 @@ export class MemberListComponent implements OnInit {
      })
      
     this.route.data.subscribe(data => {
-      this.users = data['users'].result;
+      this.users = data['users'].result.slice().reverse();
       this.currentUser = this.users[0];
       this.pagination = data['users'].pagination;
       this.showNonVisitedMembers = true;
@@ -77,7 +77,7 @@ export class MemberListComponent implements OnInit {
     };
     this.userService.getUsers(userParams, this.userSearchFilter)
     .subscribe((res: PaginatedResult<User[]>) => {
-      this.users = [...this.users, ...res.result];
+      this.users = [ ...res.result, ...this.users.slice().reverse()];
       this.pagination = res.pagination;
       console.log("Users after concat: ", this.users);
     }, error => {
@@ -96,7 +96,7 @@ export class MemberListComponent implements OnInit {
     };
     this.userService.getUsers(userParams, this.userSearchFilter)
     .subscribe((res: PaginatedResult<User[]>) => {
-      this.users = res.result;
+      this.users = res.result.slice().reverse();
       this.currentUser = this.users[0];
       this.pagination = res.pagination;
     }, error => {

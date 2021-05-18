@@ -13,7 +13,7 @@ namespace DatingApp.API.Data
         Task<bool> SaveAll();
         Task<PagedList<User>> GetUsers(UserParams userParams, UserSearchFilter userSeachFilter);
         Task<User> GetOwnUser(int id);
-        Task<User> GetOtherUser(int id);
+        Task<User> GetOtherUser(int userToGetId, int userRequesterId = 0);
         Task<UserSearchFilter> GetUserSearchFilter(int id); /* Getting the stored user params */
         Task<Photo> GetPhoto(int id);
         Task<PagedList<PhotoForModerationDTO>> GetPhotosForModeration(PhotosForModerationParams messageParams);

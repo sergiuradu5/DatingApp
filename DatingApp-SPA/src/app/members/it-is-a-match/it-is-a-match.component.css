@@ -1,4 +1,5 @@
 .it-is-a-match-container {
+    visibility: hidden;
     display: flex;
     position:fixed !important;
     flex-direction: column;

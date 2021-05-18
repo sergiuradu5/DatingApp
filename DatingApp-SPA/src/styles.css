@@ -61,14 +61,18 @@ transition-delay: 0.1s;
 
 .footer{  
     background-color: #eb6864;
-    position: absolute;
-    bottom: 0;
+    /* position: absolute; */
+    /* bottom: 0; */
     width: 100%;
     padding-top: -30px;
     padding-bottom: -20px;
     z-index: 100;
 }
 
+.sign-in-modal {
+  background-color: white;
+  top: 30%;
+}
 
   .nav-tabs > li.open, .member-tabset > .nav-tabs > li:hover {
     border-bottom: 4px solid #fbcdcf;

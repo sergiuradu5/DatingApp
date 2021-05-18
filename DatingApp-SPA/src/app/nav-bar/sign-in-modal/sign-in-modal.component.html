@@ -1,0 +1,25 @@
+<div class="sign-in-modal">
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Sign In</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    
+    <div class="modal-body">
+        <form *ngIf="!loggedIn()" id="loginForm" #loginForm='ngForm' class="form-inline my-2 my-lg-0 login-form" (ngSubmit)="login()">
+            <input class="form-control mr-sm-2" type="text" 
+            placeholder="Username" name="username" aria-label="Username" required [(ngModel)]="model.username">
+            <input class="form-control mr-sm-2" type="password" 
+            placeholder="Password" name="password" aria-label="Username" required [(ngModel)]="model.password">
+            
+            
+          </form>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancel</button>
+            <button [disabled]="!loginForm?.valid" form="loginForm" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
+        </div>
+    </div>
+    
+    
+</div>

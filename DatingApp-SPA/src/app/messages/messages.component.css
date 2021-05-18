@@ -9,3 +9,14 @@ table {
 td {
     vertical-align: middle;
 }
+
+@media (max-width: 991px) {
+    .messages-buttons, 
+    .no-messages-text {
+        justify-content: center;
+    }
+    }
+
+.message-button {
+    font-size: 1.2rem;
+}

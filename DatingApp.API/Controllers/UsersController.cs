@@ -30,7 +30,7 @@ namespace DatingApp.API.Controllers {
         public async Task<IActionResult> GetUsers ([FromQuery]UserParamsAndSearchFilterFromQueryDTO userParamsAndSearchFilterFromQuery) {
             
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var userFromRepo = await _repo.GetOtherUser(currentUserId);
+            var userFromRepo = await _repo.GetOwnUser(currentUserId);
             var userParams = _mapper.Map<UserParams>(userParamsAndSearchFilterFromQuery);
             var userSearchFilter = await _repo.GetUserSearchFilter(currentUserId);
 
@@ -66,21 +66,38 @@ namespace DatingApp.API.Controllers {
             return Ok (usersToReturn);
         }
 
-        [HttpGet("{id}", Name = "GetUser")]
-        public async Task<IActionResult> GetUser (int id) {
+        [HttpGet("{id}", Name = "GetOwnUser")]
+        public async Task<IActionResult> GetOwnUser (int id, int userRequesterId) {
             User user;
-            if (id == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            {
+            // if (id == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            //{
                  user = await _repo.GetOwnUser(id);
-            }
-            else
-            {
-                user = await _repo.GetOtherUser(id);
-            }
+            //}
             
             var userToReturn = _mapper.Map<UserForDetailedDTO>(user);
             return Ok (userToReturn);
         }
+
+        [HttpGet("{id}/userRequester/{userRequesterId}", Name = "GetOtherUser")]
+        public async Task<IActionResult> GetOtherUser ( int id, int userRequesterId ) {
+            User user;
+            // if (id == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            // {
+            //      user = await _repo.GetOwnUser(id);
+            // }
+            // else
+            // {
+                if (userRequesterId == null || userRequesterId == 0) {
+                    user = await _repo.GetOtherUser(id);    
+                } else {
+                user = await _repo.GetOtherUser(id, userRequesterId);
+                }
+            // }
+            
+            var userToReturn = _mapper.Map<UserForDetailedDTO>(user);
+            return Ok (userToReturn);
+        }
+
 
         [HttpGet("{id}/searchFilter", Name = "GetUserSearchFilter")]
         public async Task<IActionResult> GetUserSearchFilter(int id) {

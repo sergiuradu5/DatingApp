@@ -99,7 +99,10 @@ getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): O
   );
 }
 
-getUser(id): Observable<User> {
+getUser(id, userRequesterId? ): Observable<User> {
+  if (userRequesterId != null && userRequesterId !== 0 ) {
+    return this.http.get<User>(this.baseUrl + 'users/' + id + '/userRequester/' + userRequesterId);
+  }
   return this.http.get<User>(this.baseUrl + 'users/' + id);
 }
 

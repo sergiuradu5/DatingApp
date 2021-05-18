@@ -4,10 +4,10 @@
 
 <div class="container mt-3">
 
-<div class="row">
+<div class="row radio-buttons">
   <div class="btn-group">
-    <button class="btn btn-primary" [(ngModel)]="likersOrMatchesParam" btnRadio="Likers" (click)="loadUsers()">Members who like me</button>
-    <button class="btn btn-primary" [(ngModel)]="likersOrMatchesParam" btnRadio="Matches" (click)="loadUsers()">Members who I matched with</button>
+    <button class="btn btn-primary radio-button" [(ngModel)]="likersOrMatchesParam" btnRadio="Matches" (click)="loadUsers()">Matches</button>
+    <button class="btn btn-primary radio-button" [(ngModel)]="likersOrMatchesParam" btnRadio="Likers" (click)="loadUsers()">Likes</button>
   </div>
 </div>
 

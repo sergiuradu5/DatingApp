@@ -10,13 +10,13 @@
     text-decoration: none;
 }
 img.img-avatar {
-    max-width: 65px;
+    max-width: 50px;
     border: 2px solid white;
     display: inline;
 }
 
 img.img-logo {
-    max-height: 65px;
+    max-height: 50px;
     display: inline;
 }
 
@@ -51,6 +51,53 @@ img.img-logo {
     transform: scale(1.1);
 }
 
+.hover-text-container {
+    position: relative;
+    opacity: 1;
+    width: 100%;
+}
+
+.hover-text-container .hover-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    font-size: 0.9rem;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 999999999;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity  0.3s;
+}
+
+.hover-text-container .hover-text::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+.hover-text-container:hover .hover-text {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.3s;
+    transition-delay: 0.75s;
+}
+
+.sign-in-button {
+    display: none;
+}
+
 @media (max-width: 991.11px) {
     .welcome-message {
         display: none;
@@ -79,11 +126,22 @@ img.img-logo {
         width: 40%;
         margin: 0 !important;
     }
+    .hover-text {
+        display: none;
+    }
+
+    .login-form {
+        display: none;
+    }
+
+    .sign-in-button {
+        display: block;
+    }
 }
 
 @media (max-width: 410px) {
     img.img-avatar { 
-        width: 50px;
+        width: 40px;
     }
     
     img.img-logo {

@@ -6,7 +6,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from '../keyframes';
 import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize, NgxGalleryComponent } from 'ngx-gallery';
-import { Observable, Subscription } from 'rxjs';
+
 import { ActionService } from 'src/app/_services/action.service';
 import { Router } from '@angular/router';
 import * as helpers from 'src/app/_helpers/isEmpty';
@@ -32,6 +32,8 @@ export class MemberCardDetailedComponent implements OnInit {
   actionToPerform: string;
   startIndexOfPhoto: number;
   isGalleryIntoView: boolean;
+  screenHeight: number;
+  screenWidth: number;
 
   
   @ViewChild('gallery') gallery: NgxGalleryComponent;
@@ -41,6 +43,11 @@ export class MemberCardDetailedComponent implements OnInit {
   @Input() user: User;
   @Output() skipCurrentUser = new EventEmitter();
   @Output() userLikedForItIsAMatch = new EventEmitter<any>();
+  @HostListener('window:resize', ['$event'])
+onResize(event?) {
+   this.screenHeight = window.innerHeight;
+   this.screenWidth = window.innerWidth;
+}
   
 
   constructor(
@@ -50,18 +57,19 @@ export class MemberCardDetailedComponent implements OnInit {
     private actionService: ActionService,
     private router: Router
   ) { 
-    
+    this.onResize();
   }
 
   ngOnInit() {
 
     this.showGalleryArrows = this.user.photos.length > 1;
+    var heightToSet = this.screenHeight - 259;
     
     this.galleryOptions = [
       {
         startIndex: 0,
         width: '550px',
-        height: '700px',
+        height: heightToSet.toString() + 'px',
         imageSize: NgxGalleryImageSize.Cover,
         imagePercent: 100,
         imageAnimation: NgxGalleryAnimation.Slide,

@@ -1,5 +1,4 @@
 .card-container {
-    
     position: relative;
     width: 100%;
     height: 100%;
@@ -11,5 +10,38 @@
     left: 50%;
     transform: translate(-50%, 0);
     
+}
+
+.card-shadow {
+    border: 2px solid rgba(0, 0, 0, 0);
+    border-radius: 4%;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+    box-sizing: content-box;
+    position: absolute;
+    width: 550px;
+    height: calc(100vh - 190px);
+    transition: box-shadow 0.3s;
+}
+
+.no-more-users-text {
+    min-width: 380px;
+}
+
+
+@media (max-width: 605px) {
+    .card-shadow {
+        width: 400px;
+        height: 569px;
+    }
+}
+
+@media (max-width: 410px) {
+    .card-shadow {
+        width: 310px;
+        height: 479px;
+    }
+    .no-more-users-text {
+        min-width: 250px;
+    }
 }
 

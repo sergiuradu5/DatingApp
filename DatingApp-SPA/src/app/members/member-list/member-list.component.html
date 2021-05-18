@@ -3,15 +3,17 @@
 </div> -->
 
 
-<div class="container mt-5">
+<div class="container mt-2">
     
           
           <div class="card-container">
-            <div  class="" *ngFor="let user of users.slice(0, users.length).reverse()"> <!--There 12 Grids in Bootstrap -->
+            <div *ngIf="users.length > 0" class="card-shadow"></div>
+            <div  class="cards" *ngFor="let user of users"> <!--There 12 Grids in Bootstrap -->
               <!--lg for large, md medium screen, sm for small screen. The number represents how many grids an element takes up-->
               <app-member-card-detailed [user]="user" (skipCurrentUser)="skipCurrentUser($event)" (userLikedForItIsAMatch)="startItIsAMatch($event)"></app-member-card-detailed>
             </div>
-            <div class="text-center" *ngIf="users.length === 0">
+            
+            <div class="text-center no-more-users-text" *ngIf="users.length === 0">
               <h1>No more users available</h1>
               <h2>Please try again later</h2>
             </div>

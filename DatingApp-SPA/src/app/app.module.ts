@@ -61,6 +61,7 @@ import { MemberNewDetailedComponent } from './members/member-new-detailed/member
 import * as Hammer from 'hammerjs';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { ItIsAMatchComponent } from './members/it-is-a-match/it-is-a-match.component';
+import { SignInModalComponent } from './nav-bar/sign-in-modal/sign-in-modal.component';
 
 
 
@@ -102,7 +103,8 @@ export function tokenGetter() {
       SideDrawerComponent,
       DeleteModalComponent,
       MemberNewDetailedComponent,
-      ItIsAMatchComponent
+      ItIsAMatchComponent,
+      SignInModalComponent
    ],
    imports: [
       BrowserModule,

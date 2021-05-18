@@ -12,8 +12,8 @@ import { UserSearchFilter } from '../_models/user-search-filter';
 export class MatchesResolver implements Resolve<User[]> {
 
   pageNumber =1;
-  pageSize = 4;
-  likesParam = 'Likers';
+  pageSize = 6;
+  likesParam = 'Matches';
   constructor(
     private userService: UserService,
     private router: Router,
@@ -25,7 +25,7 @@ export class MatchesResolver implements Resolve<User[]> {
         pageNumber: this.pageNumber,
         pageSize: this.pageSize,
         likers: this.likesParam === 'Likers' ? true : false,
-        likees: this.likesParam === 'Likees' ? true : false,
+        showMatches: this.likesParam === 'Matches' ? true : false,
         showNonVisitedMembers: false
       }
         return this.userService.getUsers(userParams, null).pipe(
