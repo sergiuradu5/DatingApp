@@ -9,6 +9,7 @@ import {SignInModalComponent } from './nav-bar/sign-in-modal/sign-in-modal.compo
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import {RolesModalComponent} from './admin/roles-modal/roles-modal.component';
 import { take } from 'rxjs/operators';
+import { GeolocationService } from './_services/geolocation.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -32,7 +33,8 @@ export class AppComponent implements OnInit {
               private userService: UserService,
               private router: Router,
               private alertify: AlertifyService,
-              private modalService: BsModalService)
+              private modalService: BsModalService,
+              private geolocationService: GeolocationService)
   {
     
   }

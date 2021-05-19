@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UserSearchFilter } from '../_models/user-search-filter';
 import { UserSearchParams } from '../_models/user-search-params';
+import { GeolocationService } from '../_services/geolocation.service';
 
 @Injectable()
 export class MemberListResolver implements Resolve<User[]> {
@@ -18,7 +19,7 @@ export class MemberListResolver implements Resolve<User[]> {
   constructor(
     private userService: UserService,
     private router: Router,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
   ) {
     this.userService.currentUserSearchFilter.subscribe(data => {
       this.userSearchFilter = data;
@@ -28,7 +29,7 @@ export class MemberListResolver implements Resolve<User[]> {
     resolve(route: ActivatedRouteSnapshot) : Observable<User[]> {
           let userParams : UserSearchParams;
         
-          console.log('member-list.resolver with userSearchFilter: ', this.userSearchFilter);
+        
 
           userParams  = {
             pageNumber: this.pageNumber,

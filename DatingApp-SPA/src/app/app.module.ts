@@ -62,6 +62,7 @@ import * as Hammer from 'hammerjs';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { ItIsAMatchComponent } from './members/it-is-a-match/it-is-a-match.component';
 import { SignInModalComponent } from './nav-bar/sign-in-modal/sign-in-modal.component';
+import { GeolocationService } from './_services/geolocation.service';
 
 
 
@@ -143,6 +144,7 @@ export function tokenGetter() {
       MessagesResolver,
       AdminService,
       PhotosForModerationResolver,
+      GeolocationService,
       SettingsResolver,
       {
          provide: HAMMER_GESTURE_CONFIG,

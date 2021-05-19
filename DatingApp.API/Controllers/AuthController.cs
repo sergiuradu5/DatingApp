@@ -68,12 +68,16 @@ namespace DatingApp.API.Controllers
                 OrderBy = "lastActive"
             };
 
+            var geolocation = new Geolocation {
+                UserId = userToCreate.Id
+            };
+
             if(result.Succeeded)
             {
-                _repo.Add<UserSearchFilter>(defaultUserSearchFilter); //Adding the newly created like to our repo
-
+                _repo.Add<UserSearchFilter>(defaultUserSearchFilter); //Adding the newly created search filter to our repo
+                _repo.Add<Geolocation>(geolocation); //Adding the newly created geolocation
                 if(await _repo.SaveAll()) {
-                  return CreatedAtRoute("GetUser", new { controller = "Users", id = userToCreate.Id}, userToReturn );
+                  return CreatedAtRoute("GetOwnUser", new { controller = "Users", id = userToCreate.Id}, userToReturn );
                 }
             }
             return BadRequest(result.Errors);

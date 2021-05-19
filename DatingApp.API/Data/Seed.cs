@@ -57,8 +57,13 @@ namespace DatingApp.API.Data
                         MaxAge = 99,
                         OrderBy = "lastActive"
                     };
+                    
+                    var geolocation = new Geolocation {
+                        UserId = user.Id
+                    };
 
                     Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<UserSearchFilter> entityEntry = context.UserSearchFilters.Add(defaultUserSearchFilter);
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Geolocation> entityEntry2 = context.Geolocations.Add(geolocation);
                  }
                 context.SaveChanges();
                 

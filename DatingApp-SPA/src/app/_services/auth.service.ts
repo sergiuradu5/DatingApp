@@ -7,6 +7,9 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import { User } from '../_models/user';
 import { UserService } from './user.service';
 import { UserSearchFilter } from '../_models/user-search-filter';
+import { GeolocationService } from './geolocation.service';
+import { GeolocationCoords } from '../_models/geolocation-coords';
+import { AlertifyService } from './alertify.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +24,11 @@ export class AuthService {
 
   localStorageUserSearchFilter: UserSearchFilter;
   
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient,
+    private userService: UserService, 
+    private geolocationService: GeolocationService,
+    private alertify: AlertifyService
+    ) { }
 
   changeMemberPhoto(photoUrl: string) {
     this.photoUrl.next(photoUrl);
@@ -44,8 +51,13 @@ export class AuthService {
           this.changeMemberPhoto(this.currentUser.photoUrl);
           this.userService.resetUserAfterLogin(this.currentUser);
           this.userService.initiateUserSearchFilter(this.localStorageUserSearchFilter);
+          this.geolocationService.updateUserGeolocation(this.decodedToken.nameid).subscribe(data => {
+            this.alertify.success('Location updated successfully');
+          }, error => {
+            this.alertify.error(error);
+          })
           
-          // this.userService.initiateUserSearchFilter(JSON.parse(localStorage.getItem('searchFilter')));
+          
           
           
         }

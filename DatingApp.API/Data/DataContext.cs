@@ -23,6 +23,7 @@ namespace DatingApp.API.Data
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<UserSearchFilter> UserSearchFilters {get; set; }
+        public DbSet<Geolocation> Geolocations {get; set; }
 
         /*Overriding a function*/
         protected override void OnModelCreating(ModelBuilder builder)

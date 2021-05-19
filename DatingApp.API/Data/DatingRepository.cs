@@ -265,5 +265,13 @@ namespace DatingApp.API.Data
 
                 return messages;
         }
+
+        //Public method for returning the last geolocation information
+        public async Task<Geolocation> GetGeolocation (int userId) {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId );
+            
+            return user.LastSavedGeolocation;
+
+        }
     }
 }

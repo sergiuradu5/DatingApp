@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using DatingApp.API.Helpers;
+using DatingApp.API.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using AutoMapper.Configuration.Annotations;
 
@@ -25,6 +26,8 @@ namespace DatingApp.API.Models
         public bool HasLikedCurrentUser {get; set; } = false;
         [NotMapped]
         public bool HasMatchedCurrentUser {get; set; } = false;
+        //Property for last saved  geo Location
+        public virtual Geolocation LastSavedGeolocation {get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
 
         public virtual ICollection<Like> Likers{ get; set; }
