@@ -3,7 +3,7 @@ import { UserService } from 'src/app/_services/user.service';
 import { User } from 'src/app/_models/user';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { ActivatedRoute } from '@angular/router';
-import { Observable} from 'rxjs';
+import { Location } from '@angular/common';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AuthService } from 'src/app/_services/auth.service';
@@ -18,9 +18,11 @@ export class MemberDetailComponent implements OnInit {
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
-  
+  selectedTab: number;
   constructor(private userService: UserService, private alertify: AlertifyService,
-    private route: ActivatedRoute, private authService: AuthService) { }
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private location: Location) { }
 
   ngOnInit() {
     this.route.data.subscribe(data=> {
@@ -29,8 +31,7 @@ export class MemberDetailComponent implements OnInit {
 
     /* Accessing the query params in the route */
     this.route.queryParams.subscribe(params => {
-      const selectedTab = params['tab'];
-      this.memberTabs.tabs[selectedTab>0 ? selectedTab : 0].active = true;
+      this.selectedTab = params['tab'];
     })
 
     this.galleryOptions = [
@@ -59,6 +60,10 @@ export class MemberDetailComponent implements OnInit {
     return imageUrls;
   }
 
+  ngAfterViewInit() {
+    this.memberTabs.tabs[this.selectedTab>0 ? this.selectedTab : 0].active = true;
+  }
+
   selectTab(tabId: number) {
     this.memberTabs.tabs[tabId].active = true;
   }
@@ -74,6 +79,10 @@ export class MemberDetailComponent implements OnInit {
     }, error => {
       this.alertify.error(error);
     }); 
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 
  

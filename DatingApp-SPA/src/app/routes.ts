@@ -14,7 +14,6 @@ import { MatchesResolver } from './_resolver/matches.resolver';
 import { MessagesResolver } from './_resolver/messages.resolver';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { PhotosForModerationResolver } from './_resolver/photos-for-moderation.resolver';
-import { MemberNewDetailedComponent } from './members/member-new-detailed/member-new-detailed.component';
 import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
 import { SettingsComponent } from './settings/settings.component';

@@ -1,15 +1,35 @@
-<div class="card member-card mb-4">
-  <div class="card-img-wrapper">
-      <img class="card-img-top" src="{{user.photoUrl || '../../../../../assets/user.png'}}" alt="{{user.knownAs}}">
-    <ul class="list-inline member-icons animate text-center">
-      <button class="btn-md btn-primary ml-1 mr-1"
-      [routerLink]="['/matches/', user.id]"> <i class="fa fa-user"></i></button>
-      <button *ngIf="!user.hasMatchedCurrentUser" class="btn-md btn-primary ml-1 mr-1" (click)="sendLike(user.id)"> <i class="fa fa-heart"></i></button>
-      <button *ngIf="user.hasMatchedCurrentUser" class="btn-md btn-primary ml-1 mr-1" [routerLink]="['/matches/', user.id]" [queryParams]="{tab: 3}"> <i class="fa fa-envelope"></i></button>
-    </ul>
-    </div>
-    <div class="card-body p-1">
-      <h6 class="card-title text-center mb-1"><i class="fa fa-user"></i> {{user.knownAs}}, {{user.age}} 
-      </h6>
-      <p class="card-text text-muted text-center"> {{user.city}} </p>    </div>
-</div>
+  <div class="card cards pb-4">
+      <div class="card member-card mb-4"
+      [@cardAnimator]="!isFlipped ? 'notFlipped' : 'flipped' " 
+      >
+        <div class="card-img-wrapper">
+            <img class="card-img-top" src="{{user.photoUrl || '../../../../../assets/user.png'}}" alt="{{user.knownAs}}">
+          <ul class="list-inline member-icons animate text-center">
+            <button class="btn-md btn-primary ml-1 mr-1"
+            [routerLink]="['/matches/', user.id]"> <i class="fa fa-user fa-2x"></i></button>
+            <button *ngIf="!user.hasMatchedCurrentUser" class="btn-md btn-primary ml-1 mr-1" (click)="sendLike(user.id)"> <i class="fa fa-heart fa-2x"></i></button>
+            <button *ngIf="user.hasMatchedCurrentUser" class="btn-md btn-primary ml-1 mr-1" [routerLink]="['/matches/', user.id]" [queryParams]="{tab: 3}"> <i class="fa fa-envelope fa-2x"></i></button>
+          </ul>
+          </div>
+          <div class="card-body p-1">
+            <h6 class="card-title text-center mb-1"><i class="fa fa-user"></i> {{user.knownAs}}, {{user.age}} 
+            </h6>
+            <p class="card-text text-muted text-center"> {{user.city}} </p>    </div>
+      </div>    
+
+      <div class="card member-card-backside mb-4"
+      [@backCardAnimator]="!isFlipped ? 'flipped' : 'notFlipped' " >
+        <div class="card-img-wrapper-pink">
+            <img class="card-img-top" src="{{user.photoUrl || '../../../../../assets/user.png'}}" alt="{{user.knownAs}}">
+            <button *ngIf="user.hasMatchedCurrentUser" class="btn-md btn-primary pink-message-button" [routerLink]="['/matches/', user.id]" [queryParams]="{tab: 3}"> <i class="fa fa-envelope fa-3x"></i></button>
+          
+        </div>
+          <div class="card-body p-1">
+            <h6 class="card-title text-center mb-1"><i class="fa fa-user"></i> {{user.knownAs}}, {{user.age}} 
+            </h6>
+            <p class="card-text text-muted text-center"> {{user.city}} </p>    </div>
+      </div>
+  </div>
+
+
+

@@ -1,5 +1,12 @@
 import { keyframes, style } from '@angular/animations';
 
+
+export const flipOutX = [
+    style({transform: 'perspective(400px)', offset: 0}),
+    style({transform: 'perspective(400px) rotate3d(1, 0, 0, -20deg)', opacity: 1, offset: 0.3}),
+    style({transform: 'perspective(400px) rotate3d(1, 0, 0, 180deg)', opacity: 1, offset: 1})
+]
+
 export const wobble = [
     style({transform: 'translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg)', offset: .15}),
     style({transform: 'translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg)', offset: .30}),

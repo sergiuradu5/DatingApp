@@ -55,7 +55,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { SettingsResolver } from './_resolver/settings.resolver';
 import { SideDrawerComponent } from './side-drawer/side-drawer/side-drawer.component';
 import { DeleteModalComponent } from './members/member-edit/delete-modal/delete-modal.component';
-import { MemberNewDetailedComponent } from './members/member-new-detailed/member-new-detailed.component';
+
 
 
 import * as Hammer from 'hammerjs';
@@ -102,7 +102,6 @@ export function tokenGetter() {
       SettingsComponent,
       SideDrawerComponent,
       DeleteModalComponent,
-      MemberNewDetailedComponent,
       ItIsAMatchComponent,
       SignInModalComponent
    ],

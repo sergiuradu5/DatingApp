@@ -1,4 +1,5 @@
 <div class="container mt-4">
+  <button class="btn btn-primary mb-2" (click)="navigateBack()"><i class="fa fa-arrow-left fa-lg" aria-hidden=""></i></button>
   <div class="row">
     <div class="col-sm-4"> <!-- LEFT HAND SIDE-->
       <div class="card"> 
@@ -55,7 +56,7 @@
             <tab heading="Photos">
               <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
             </tab>
-            <tab *ngIf="user.hasMatchedCurrentUser" heading="Messages">
+            <tab *ngIf="user?.hasMatchedCurrentUser" heading="Messages">
               <app-member-messages [recipientId]="user.id"></app-member-messages>
             </tab>
 
