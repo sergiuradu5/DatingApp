@@ -34,6 +34,12 @@ export const jello = [
     style({transform: 'none', offset: 1})
 ]
 
+export const flipAround = [
+    style({transform: 'rotateY(0deg) translateY(0) scale(1.1)', offset: 0}),
+    style({transform: 'rotateY(126deg) translateY(-25%) scale(1.1)', offset: 0.35}),
+    style({transform: 'rotateY(234deg) translateY(-20%) scale(1.1)', offset: 0.65}),
+    style({transform: 'rotateY(360deg) translateY(0) scale(1.1)', offset: 1})
+]
 
 export const swing = [
     style({transform: 'rotate3d(0, 0, 1, 15deg)', offset: .2}),

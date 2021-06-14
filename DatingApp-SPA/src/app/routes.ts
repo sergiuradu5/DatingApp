@@ -27,10 +27,8 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'messages', component: MessagesComponent, resolve: {messages: MessagesResolver} },
-      
-      
       { path: 'member/edit', component: MemberEditComponent , resolve: {user: MemberEditResolver}, canDeactivate: [PreventUnsavedChanges]},
-      { path: 'member/settings', component: SettingsComponent, resolve: {searchFilter: SettingsResolver}},
+      { path: 'member/filters', component: SettingsComponent, resolve: {searchFilter: SettingsResolver}},
       { path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver}},
       { path: 'matches/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver} },
       { path: 'matches', component: MatchesComponent, resolve: {users: MatchesResolver } },

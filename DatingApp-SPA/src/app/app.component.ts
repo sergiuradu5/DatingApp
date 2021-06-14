@@ -16,7 +16,7 @@ import { GeolocationService } from './_services/geolocation.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'DatingApp-SPA';
+  title = 'Lovender';
   jwtHelper = new JwtHelperService();
   isSideDrawerOpen: boolean = false;
   signInModalToggled: boolean = false;
@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
     if (event) {
       this.bsModalRef = this.modalService.show(SignInModalComponent, this.config);
       this.signInModalToggled = true;
-      console.log('[app.component] signInModalToggled', this.signInModalToggled);
+      
     }
     if (!event) {
       this.bsModalRef.hide();

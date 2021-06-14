@@ -25,5 +25,4 @@ export class MemberEditResolver implements Resolve<User> {
             })
         );
     }
-
 }

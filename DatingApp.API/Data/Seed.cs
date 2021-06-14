@@ -13,7 +13,7 @@ namespace DatingApp.API.Data
         {
             if (!userManager.Users.Any())
             {
-                var userData = System.IO.File.ReadAllText("Data/UserSeedDataExtended.json");
+                var userData = System.IO.File.ReadAllText("Data/UserSeedDataWithGeolocation.json");
                 var users = JsonConvert.DeserializeObject<List<User>>(userData);
 
                 //create some roles
@@ -21,8 +21,7 @@ namespace DatingApp.API.Data
                 {
                     new Role{ Name = "Member" },
                     new Role{ Name = "Admin" },
-                    new Role{ Name = "Moderator" },
-                    new Role{ Name = "VIP" }
+                    new Role{ Name = "Moderator" }
                 };
 
                 foreach (var role in roles)
@@ -58,12 +57,14 @@ namespace DatingApp.API.Data
                         OrderBy = "lastActive"
                     };
                     
-                    var geolocation = new Geolocation {
-                        UserId = user.Id
-                    };
+                    // var geolocation = new Geolocation {
+                    //     UserId = user.Id,
+                    //     Latitude = user.LastSavedGeolocation.Latitude,
+                    //     Longitude = user.LastSavedGeolocation.Longitude
+                    // };
 
                     Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<UserSearchFilter> entityEntry = context.UserSearchFilters.Add(defaultUserSearchFilter);
-                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Geolocation> entityEntry2 = context.Geolocations.Add(geolocation);
+                    // Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Geolocation> entityEntry2 = context.Geolocations.Add(geolocation);
                  }
                 context.SaveChanges();
                 

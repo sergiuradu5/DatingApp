@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { UserSearchFilter } from '../_models/user-search-filter';
 import { UserSearchParams } from '../_models/user-search-params';
 import { GeolocationService } from '../_services/geolocation.service';
+import { AuthService } from '../_services/auth.service';
 
 @Injectable()
 export class MemberListResolver implements Resolve<User[]> {
@@ -18,12 +19,14 @@ export class MemberListResolver implements Resolve<User[]> {
   actionOnUserFromRoute : string;
   constructor(
     private userService: UserService,
+    private authService: AuthService,
     private router: Router,
     private alertify: AlertifyService,
   ) {
     this.userService.currentUserSearchFilter.subscribe(data => {
       this.userSearchFilter = data;
-    })
+      
+    });
   }
 
     resolve(route: ActivatedRouteSnapshot) : Observable<User[]> {
@@ -37,7 +40,10 @@ export class MemberListResolver implements Resolve<User[]> {
             likers: false,
             likees: false,
             showNonVisitedMembers: true,
-            withDetails: true //We want the users with details
+            withDetails: true, //We want the users with details
+            showDistance: true,
+            distanceLimit: true,
+            userId: this.authService.decodedToken.nameid
           }
 
           return this.userService.getUsers(userParams, this.userSearchFilter).pipe(

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System;
+using DatingApp.API.Models;
 
 namespace DatingApp.API.DTO
 {
@@ -25,6 +26,8 @@ namespace DatingApp.API.DTO
         public DateTime Created { get; set; }
 
         public DateTime LastActive { get; set; }
+
+        public GeolocationForRegisterDTO LastSavedGeolocation {get; set; }
         
         public UserForRegisterDTO()
         {

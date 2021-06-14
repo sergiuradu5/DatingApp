@@ -60,7 +60,7 @@ transition-delay: 0.1s;
 }
 
 .footer{  
-    background-color: #eb6864;
+    background-color: rgb(235, 104, 100);
     /* position: absolute; */
     /* bottom: 0; */
     width: 100%;
@@ -72,6 +72,7 @@ transition-delay: 0.1s;
 .sign-in-modal {
   background-color: white;
   top: 30%;
+  z-index: 9999;
 }
 
   .nav-tabs > li.open, .member-tabset > .nav-tabs > li:hover {
@@ -129,6 +130,60 @@ transition-delay: 0.1s;
       display: none;
     }
   }
+
+  .hover-text-container {
+    position: relative;
+    opacity: 1;
+    width: fit-content;
+}
+
+.hover-text-container .hover-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    font-size: 0.9rem;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 999999999;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity  0.3s;
+}
+
+.hover-text-container .hover-text-button {
+  width: 100px;
+  top: -75%;
+  left: 70%;
+  margin-left: -60px;
+}
+
+.hover-text-container .hover-text::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+.hover-text-container .hover-text-button::after {
+  visibility: hidden;
+}
+
+.hover-text-container:hover .hover-text {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.3s;
+    transition-delay: 0.5s;
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

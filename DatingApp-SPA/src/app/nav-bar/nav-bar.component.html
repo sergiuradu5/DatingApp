@@ -2,7 +2,8 @@
   <div class="container collapse navbar-collapse">
     <div class="navbar-logo">
       <a class="" [routerLink]="['/home']">
-        <img src="../../assets/caminder-logo.png" class="img-logo">
+        <img src="../../assets/lovender-handwritten.png" class="img-logo img-logo-big">
+        <img src="../../assets/lovender-logo-w.png" class="img-logo img-logo-small">
       </a>
     </div>
 
@@ -57,7 +58,7 @@
     
     </div>
 
-    <button *ngIf="!loggedIn()" class="sign-in-button btn btn-success my-2 my-sm-0" (click)="toggleTheSignInModal()"> {{signInModalToggled ? 'Close' : 'Sign In' }}</button>
+    <button *ngIf="!loggedIn()" class="sign-in-button btn btn-success " (click)="toggleTheSignInModal()"> {{signInModalToggled ? 'Close' : 'Sign In' }}</button>
     <form *ngIf="!loggedIn()" #loginForm='ngForm' class="form-inline my-2 my-lg-0 login-form" (ngSubmit)="login()">
       
       <input class="form-control mr-sm-2" type="text" 

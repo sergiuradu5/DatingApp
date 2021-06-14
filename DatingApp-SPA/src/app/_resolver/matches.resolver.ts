@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UserSearchParams } from '../_models/user-search-params';
 import { UserSearchFilter } from '../_models/user-search-filter';
+import { AuthService } from '../_services/auth.service';
 
 @Injectable()
 export class MatchesResolver implements Resolve<User[]> {
@@ -17,6 +18,7 @@ export class MatchesResolver implements Resolve<User[]> {
   constructor(
     private userService: UserService,
     private router: Router,
+    private authService: AuthService,
     private alertify: AlertifyService
   ) {}
 
@@ -26,7 +28,8 @@ export class MatchesResolver implements Resolve<User[]> {
         pageSize: this.pageSize,
         likers: this.likesParam === 'Likers' ? true : false,
         showMatches: this.likesParam === 'Matches' ? true : false,
-        showNonVisitedMembers: false
+        showNonVisitedMembers: false,
+        userId: this.authService.decodedToken.nameid
       }
         return this.userService.getUsers(userParams, null).pipe(
             catchError(error => {

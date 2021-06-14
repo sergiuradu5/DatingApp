@@ -11,7 +11,8 @@ namespace DatingApp.API.Data
         void Add<T>(T entity) where T: class;
         void Delete<T>(T entity) where T: class;
         Task<bool> SaveAll();
-        Task<PagedList<User>> GetUsers(UserParams userParams, UserSearchFilter userSeachFilter);
+        Task<PagedList<User>> GetUsers(UserParams userParams, UserSearchFilter userSearchFilter);
+        Task<PagedList<User>> GetUsers(UserParams userParams);
         Task<User> GetOwnUser(int id);
         Task<User> GetOtherUser(int userToGetId, int userRequesterId = 0);
         Task<UserSearchFilter> GetUserSearchFilter(int id); /* Getting the stored user params */

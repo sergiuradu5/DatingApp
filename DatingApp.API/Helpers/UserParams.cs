@@ -2,6 +2,7 @@ namespace DatingApp.API.Helpers
 {
     public class UserParams
     {
+    public int UserId { get; set; }
     private const int MaxPageSize = 50;
     public int PageNumber { get; set; } = 1;
     private int pageSize = 5;
@@ -14,7 +15,10 @@ namespace DatingApp.API.Helpers
       public bool Likees { get; set; } = false;
       public bool Likers { get; set; } = false;
       public bool ShowNonVisitedMembers {get; set; } = false;
+      public bool WithDetails { get; set; } = false;
       public bool ShowMatches { get; set; } = false;
+      public bool ShowDistance { get; set; } = false;
+      public bool DistanceLimit { get; set; } = false;
       
     }
 }

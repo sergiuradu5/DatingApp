@@ -12,7 +12,7 @@ namespace DatingApp.API.Data
 {
     public class DatingRepository : IDatingRepository {
         private readonly DataContext _context;
-        // private readonly DataContext context;
+        
         public DatingRepository (DataContext context) {
             _context = context;
 
@@ -111,31 +111,32 @@ namespace DatingApp.API.Data
         }
         /* This Method will be using paging -> instead of retreiving all the data at once
         data is separated / divided into pages */
-        public async Task<PagedList<User>> GetUsers(UserParams usersParams, UserSearchFilter userSearchFilter) {
+        public async Task<PagedList<User>> GetUsers(UserParams userParams, UserSearchFilter userSearchFilter) {
 
-            var users = _context.Users.Where(u => u.Id != userSearchFilter.UserId)
+
+            var users = _context.Users.Where(u => u.Id != userParams.UserId)
             .OrderByDescending(u => u.LastActive ).AsQueryable();
-            users = users.Where(u => u.Id != userSearchFilter.UserId);
+            users = users.Where(u => u.Id != userParams.UserId);
 
             users = users.Where( u => u.Gender == userSearchFilter.Gender);
 
-            if (usersParams.ShowNonVisitedMembers)
+            if (userParams.ShowNonVisitedMembers)
             {
                 
-                var visitedMembers = await GetVisitedUsers(userSearchFilter.UserId);
+                var visitedMembers = await GetVisitedUsers(userParams.UserId);
                 users = users.Where(u => !visitedMembers.Contains(u.Id));
             }
 
-            if(usersParams.Likers)
+            if(userParams.Likers)
             {
-                var userLikers = await GetUserLikes(userSearchFilter.UserId, usersParams.Likers);
-                var userLikees = await GetUserLikes(userSearchFilter.UserId, !usersParams.Likers);
+                var userLikers = await GetUserLikes(userParams.UserId, userParams.Likers);
+                var userLikees = await GetUserLikes(userParams.UserId, !userParams.Likers);
                 users = users.Where(u => userLikers.Contains(u.Id) && !userLikees.Contains(u.Id));
             }
 
-            if(usersParams.Likees)
+            if(userParams.Likees)
             {
-                var userLikees = await GetUserLikes(userSearchFilter.UserId, usersParams.Likers);
+                var userLikees = await GetUserLikes(userParams.UserId, userParams.Likers);
                 users = users.Where(u => userLikees.Contains(u.Id));
             }
 
@@ -147,10 +148,21 @@ namespace DatingApp.API.Data
                 users = users.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <=maxDob);
             }
 
-            var userLikersForProperty = await GetUserLikes(userSearchFilter.UserId, true);
-            var userLikeesForProperty = await GetUserLikes(userSearchFilter.UserId, false);                  
-
+            var userLikersForProperty = await GetUserLikes(userParams.UserId, true);
+            var userLikeesForProperty = await GetUserLikes(userParams.UserId, false);                  
+            List<int> usersWithinDistance = new List<int>();
+        
             foreach (var user in users) {
+                if (userParams.ShowDistance) {
+                    var distance = await CalculateDistance(userParams.UserId, user.Id);
+                    
+
+                    if ((userParams.DistanceLimit==true) && (distance <= userSearchFilter.MaxDistance)) {
+                        usersWithinDistance.Add(user.Id);
+                    }
+                    user.DistanceFromCurrentUser = Math.Truncate(distance);
+                }
+
                 if (userLikersForProperty.Contains(user.Id)) {
                     user.HasLikedCurrentUser = true;
                     if (userLikeesForProperty.Contains(user.Id)) {
@@ -163,7 +175,13 @@ namespace DatingApp.API.Data
 
             }
 
-            if (usersParams.ShowMatches) {
+            if(userParams.DistanceLimit) {
+            users = users.Where(u => usersWithinDistance.Contains(u.Id));
+           
+            }
+
+
+            if (userParams.ShowMatches) {
                 users = users.Where(u => userLikersForProperty.Contains(u.Id) && userLikeesForProperty.Contains(u.Id));
             }
 
@@ -180,8 +198,78 @@ namespace DatingApp.API.Data
                 }
             }
 
-            return await PagedList<User>.CreateAsync(users, usersParams.PageNumber, 
-            usersParams.PageSize);
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, 
+            userParams.PageSize);
+        }
+
+        public async Task<PagedList<User>> GetUsers(UserParams userParams) {
+            
+            var userSearchFilter = await GetUserSearchFilter(userParams.UserId);
+            var users = _context.Users.Where(u => u.Id != userParams.UserId)
+            .OrderByDescending(u => u.LastActive ).AsQueryable();
+            users = users.Where(u => u.Id != userParams.UserId);
+
+            users = users.Where( u => u.Gender == userSearchFilter.Gender);
+
+            
+
+            if (userParams.ShowNonVisitedMembers)
+            {
+                var visitedMembers = await GetVisitedUsers(userParams.UserId);
+                users = users.Where(u => !visitedMembers.Contains(u.Id));
+            }
+            
+
+            if(userParams.Likers)
+            {
+                
+                var userLikers = await GetUserLikes(userParams.UserId, userParams.Likers);
+                var userLikees = await GetUserLikes(userParams.UserId, !userParams.Likers);
+               
+                users = users.Where(u => userLikers.Contains(u.Id) && !userLikees.Contains(u.Id));
+            }
+           
+
+            var userLikersForProperty = await GetUserLikes(userParams.UserId, true);
+            var userLikeesForProperty = await GetUserLikes(userParams.UserId, false);
+
+            foreach (var user in users) {
+                if (userParams.ShowDistance) {
+                    var distance = await CalculateDistance(userParams.UserId, user.Id);
+                    user.DistanceFromCurrentUser = Math.Truncate(distance);
+                }
+
+                if (userLikersForProperty.Contains(user.Id)) {
+                    user.HasLikedCurrentUser = true;
+                    if (userLikeesForProperty.Contains(user.Id)) {
+                        user.HasMatchedCurrentUser = true;
+                    }
+                } else {
+                    user.HasLikedCurrentUser = false;
+                    user.HasMatchedCurrentUser = false;
+                }
+            }
+            
+
+            if (userParams.ShowMatches) {
+                users = users.Where(u => userLikersForProperty.Contains(u.Id) && userLikeesForProperty.Contains(u.Id));
+            }
+
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, 
+            userParams.PageSize);
+        }
+
+        //Private method for calculating the distance between two coordinate points
+        public async Task<double> CalculateDistance (int userRequesterId, int userRequestedId) {
+            Geolocation geoloc1;
+            Geolocation geoloc2;
+            geoloc2 = await GetGeolocation(userRequestedId);
+            geoloc1 = await GetGeolocation(userRequesterId);
+            var p = 0.017453292519943295; 
+            var a = 0.5 - Math.Cos( (geoloc2.Latitude - geoloc1.Latitude) * p) /2 +
+                        Math.Cos(geoloc1.Latitude * p ) * Math.Cos(geoloc2.Latitude * p) *
+                        (1 - Math.Cos((geoloc2.Longitude - geoloc1.Longitude) *p))/2;
+            return 12742 * Math.Asin(Math.Sqrt(a));
         }
 
 
@@ -196,9 +284,7 @@ namespace DatingApp.API.Data
         //Private method for returning the Likers or Likees
         private async Task<IEnumerable<int>> GetUserLikes(int id, bool likers)
         {
-            var user = await _context.Users
-           
-            .FirstOrDefaultAsync(u => u.Id == id );
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id );
 
             if (likers)
             {
@@ -268,9 +354,9 @@ namespace DatingApp.API.Data
 
         //Public method for returning the last geolocation information
         public async Task<Geolocation> GetGeolocation (int userId) {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId );
+            var geolocation = await _context.Geolocations.FirstOrDefaultAsync(u => u.UserId == userId );
             
-            return user.LastSavedGeolocation;
+            return geolocation;
 
         }
     }

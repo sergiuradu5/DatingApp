@@ -41,9 +41,9 @@ export class MemberCardComponent implements OnInit {
 
   visitUser(recipientId: number) {
     this.userService.visitUser(this.authService.decodedToken.nameid, recipientId).subscribe( data => {
-      this.alertify.success('You have visited ' + this.user.knownAs);
+      
     }, error => {
-      this.alertify.error(error);
+      
     }); 
   }
 
@@ -52,7 +52,6 @@ export class MemberCardComponent implements OnInit {
     this.visitUser(recipientId);
     
     this.userService.sendLike(this.authService.decodedToken.nameid, recipientId).subscribe( data=> {
-      this.alertify.success('You have liked ' + this.user.knownAs);
       this.isFlipped = true;
       setTimeout(() => {
         this.user.hasMatchedCurrentUser = true;
@@ -65,7 +64,7 @@ export class MemberCardComponent implements OnInit {
   }
 
   startAnimation(state) {
-    console.log(state)
+    
     if(!this.animationState) {
       this.animationState = state
     }

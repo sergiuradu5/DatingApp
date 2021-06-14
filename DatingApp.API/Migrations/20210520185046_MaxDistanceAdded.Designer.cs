@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210519220605_GeolocationAddedAgain")]
-    partial class GeolocationAddedAgain
+    [Migration("20210520185046_MaxDistanceAdded")]
+    partial class MaxDistanceAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -278,6 +278,9 @@ namespace DatingApp.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("MaxAge")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxDistance")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MinAge")

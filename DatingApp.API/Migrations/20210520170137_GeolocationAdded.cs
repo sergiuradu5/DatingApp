@@ -2,7 +2,7 @@
 
 namespace DatingApp.API.Migrations
 {
-    public partial class GeolocationAddedAgain : Migration
+    public partial class GeolocationAdded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

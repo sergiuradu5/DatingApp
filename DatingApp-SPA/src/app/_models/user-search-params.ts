@@ -6,4 +6,7 @@ likers? : boolean;
 showNonVisitedMembers? : boolean;
 withDetails?: boolean;
 showMatches? : boolean;
+showDistance? : boolean;
+distanceLimit? : boolean;
+userId?: number;
 }

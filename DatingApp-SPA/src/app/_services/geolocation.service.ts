@@ -2,30 +2,45 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GeolocationCoords } from '../_models/geolocation-coords';
 import {environment} from '../../environments/environment';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeolocationService {
 
-  coords: any = {};
+  coordsSubject: Subject<GeolocationCoords> = new Subject<GeolocationCoords>();
+  currentCoordsObservable = this.coordsSubject.asObservable();
+  coords: GeolocationCoords;
+
   isSupported: boolean = false;
   
   baseUrl= environment.baseUrl;
   constructor(private http: HttpClient) { 
     if (navigator.geolocation) {
-      this.isSupported = true;
-      this.findMe();
+      this.isSupported = true;      
+      
     }
   }
 
-  findMe() {
+  getCoordinates() {
+    return this.coords;
+  };
+
+  initiateLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log('Current Geo Position: ', position);
-        this.coords.latitude = position.coords.latitude;
-        this.coords.longitude = position.coords.longitude;
-      });
+        
+        const coords: GeolocationCoords = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }
+        this.coordsSubject.next(coords);
+        this.coords = coords;
+      },
+      () => {alert('Please enable your GPS position feature.');},
+      {maximumAge:10000, timeout:5000, enableHighAccuracy: true}
+      );
     } else {
       alert("Geolocation is not supported by this browser.");
     }

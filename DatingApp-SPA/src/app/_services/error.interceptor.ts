@@ -21,6 +21,9 @@ export class ErrorInterceptor implements HttpInterceptor {
             if(error.status == 401) {
                 return throwError(error.statusText);
             }
+            if (error.status == 400) {
+                return throwError(error)
+            }
             if(error instanceof HttpErrorResponse)
             {
                 // These are the 500 Internal Errors
@@ -28,6 +31,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 if(applicationError) {
                     return throwError(applicationError);
                 }
+
                 // Model State Errors (e.g. Password too short)
                 const serverError = error.error;
                 let modalStateErrors = '';
@@ -38,7 +42,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                         }
                     }
                 }
-                return throwError(modalStateErrors || serverError || 'Server Error');
+                return throwError(modalStateErrors || serverError ||  'Server Error');
 
             }
         })

@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DatingApp.API.Controllers {
     [ServiceFilter(typeof(LogUserActivity))]
-    //[Authorize]
     [Route ("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase {
@@ -29,28 +28,31 @@ namespace DatingApp.API.Controllers {
         [HttpGet]
         public async Task<IActionResult> GetUsers ([FromQuery]UserParamsAndSearchFilterFromQueryDTO userParamsAndSearchFilterFromQuery) {
             
+
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var userFromRepo = await _repo.GetOwnUser(currentUserId);
-            var userParams = _mapper.Map<UserParams>(userParamsAndSearchFilterFromQuery);
-            var userSearchFilter = await _repo.GetUserSearchFilter(currentUserId);
-
-            if(string.IsNullOrEmpty(userParamsAndSearchFilterFromQuery.Gender))
-            {
-                // if(userSearchFilter.Gender == "male")
-                // userSearchFilter.Gender = "female";
-
-                // if(userSearchFilter.Gender == "female")
-                // userSearchFilter.Gender = "male";
-
-                // if(userSearchFilter.Gender == "other")
-                // userSearchFilter.Gender = "other";
-
-                userSearchFilter.MinAge = 18;
-                userSearchFilter.MaxAge = 99;
-                userSearchFilter.OrderBy = "lastActive";
+            if (userParamsAndSearchFilterFromQuery.UserId != currentUserId) {
+                return Unauthorized();
             }
+            var userFromRepo = await _repo.GetOwnUser(currentUserId);
+            
+            PagedList<User> users;
+            UserSearchFilter userSearchFilter;
+            
+            var userParams = _mapper.Map<UserParams>(userParamsAndSearchFilterFromQuery);
 
-            var users = await _repo.GetUsers(userParams, userSearchFilter);
+
+            userSearchFilter = _mapper.Map<UserSearchFilter>(userParamsAndSearchFilterFromQuery);
+            
+            
+            
+            if (string.IsNullOrEmpty(userParamsAndSearchFilterFromQuery.Gender) || 
+            userParamsAndSearchFilterFromQuery.MinAge == null) {
+                users = await _repo.GetUsers(userParams);
+            } else {
+                users = await _repo.GetUsers(userParams, userSearchFilter);
+            }
+            
+
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDTO>>(users);
 
             Response.AddPagination(users.CurrentPage, users.PageSize, 
@@ -213,17 +215,52 @@ namespace DatingApp.API.Controllers {
             return BadRequest( "Failed to visit user");
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id) 
+        [HttpDelete("{id}/{userName}")]
+        public async Task<IActionResult> DeleteUser(int id, string userName) 
         {
             if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             return Unauthorized();
 
-            var userFromRepo = await _repo.GetOwnUser(id);
-            
-            _repo.Delete(userFromRepo);
+            var userFromRepo = await _userManager.FindByNameAsync(userName);
 
-            if (await _repo.SaveAll()) {
+            if (userFromRepo.Photos != null)
+            foreach (var photo in userFromRepo.Photos) {
+                _repo.Delete(photo);
+            }
+
+            if (userFromRepo.LastSavedGeolocation != null)
+            _repo.Delete(userFromRepo.LastSavedGeolocation);
+
+            if (userFromRepo.MessagesSent != null)
+            foreach (var messageSent in userFromRepo.MessagesSent) {
+                _repo.Delete(messageSent);
+            }
+
+            if (userFromRepo.MessagesReceived != null)
+            foreach (var messageReceived in userFromRepo.MessagesReceived) {
+                _repo.Delete(messageReceived);
+            }
+
+            if (userFromRepo.Likers != null)
+            foreach(var liker in userFromRepo.Likers) {
+                _repo.Delete(liker);
+            }
+
+            if (userFromRepo.Likees != null)
+            foreach(var likee in userFromRepo.Likees) {
+                _repo.Delete(likee);
+            }
+
+            
+            if(userFromRepo.UserRoles != null) 
+            foreach(var userRole in userFromRepo.UserRoles) {
+                 await _userManager.RemoveFromRoleAsync(userFromRepo, "member");
+            }
+            
+            Console.WriteLine("User for deletion: " + userFromRepo.ConcurrencyStamp);
+           var result = await _userManager.DeleteAsync(userFromRepo);
+
+            if (result.Succeeded && await _repo.SaveAll()) {
                 return Ok();
             }
             

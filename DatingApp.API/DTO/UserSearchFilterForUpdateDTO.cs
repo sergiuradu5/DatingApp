@@ -10,5 +10,7 @@ namespace DatingApp.API.Models
       public int MaxAge { get; set; } = 99;
 
       public string OrderBy { get; set; }
+
+      public int MaxDistance { get; set; } = 200;
     }
 }

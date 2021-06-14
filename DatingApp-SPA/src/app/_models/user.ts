@@ -1,3 +1,4 @@
+import { GeolocationCoords } from './geolocation-coords';
 import {Photo} from './photo';
 
 export interface User {
@@ -18,4 +19,6 @@ export interface User {
     roles?: string[];
     hasLikedCurrentUser?: boolean;
     hasMatchedCurrentUser?: boolean;
+    distanceFromCurrentUser?: number;
+    lastSavedGeolocation?: GeolocationCoords;
 }

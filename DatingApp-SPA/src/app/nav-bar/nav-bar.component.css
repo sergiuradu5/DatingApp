@@ -1,6 +1,6 @@
 .navbar {
     padding: 0.2rem 1rem;
-    z-index: 999999;
+    z-index: 1000;
 }
 
 
@@ -29,6 +29,19 @@ img.img-logo {
 
 .img-logo {
     margin: 0 auto;
+    transform: scale(1);
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.img-logo:hover {
+    transform: scale(1.1);
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+img.img-logo-small {
+    display: none;
 }
 
 
@@ -38,7 +51,9 @@ img.img-logo {
         flex-direction: row;
         justify-content: space-around;
         align-items: center;
-        transform: translateX(24%);
+        transform: translateX(10%);
+        align-self: center;
+        justify-self: center;
         
 }
 
@@ -49,50 +64,10 @@ img.img-logo {
 
 .nav-item:hover {
     transform: scale(1.1);
+    
 }
 
-.hover-text-container {
-    position: relative;
-    opacity: 1;
-    width: 100%;
-}
 
-.hover-text-container .hover-text {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    font-size: 0.9rem;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 999999999;
-    top: 100%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    -webkit-transition: opacity 0.3s;
-    transition: opacity  0.3s;
-}
-
-.hover-text-container .hover-text::after {
-    content: "";
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent black transparent;
-}
-
-.hover-text-container:hover .hover-text {
-    visibility: visible;
-    opacity: 1;
-    transition: all 0.3s;
-    transition-delay: 0.75s;
-}
 
 .sign-in-button {
     display: none;
@@ -110,7 +85,7 @@ img.img-logo {
     }
   
     .navbar-nav {
-        transform: translateX(0);
+        transform: translateX(-25%);
     }
     .dropdown-menu {
         display: none;
@@ -118,12 +93,21 @@ img.img-logo {
 }
 
 @media (max-width: 767px) {
+    img.img-logo-big {
+        display: none;
+    }
+
+    img.img-logo-small {
+        display: block;
+    }
+
     .dropdown-menu {
         position: absolute;
         right: 200px;
     }
     .navbar-nav {
         width: 40%;
+        transform: translateX(0%);
         margin: 0 !important;
     }
     .hover-text {
@@ -143,6 +127,10 @@ img.img-logo {
     img.img-avatar { 
         width: 40px;
         margin-right: 4px !important;
+    }
+
+    .sign-in-button {
+        margin: 0 1rem;
     }
     
     img.img-logo {

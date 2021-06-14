@@ -3,4 +3,5 @@ export interface UserSearchFilter {
     minAge?: number;
     maxAge?: number;
     orderBy?: string;
+    maxDistance?: number;
 }

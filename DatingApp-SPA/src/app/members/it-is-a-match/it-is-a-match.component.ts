@@ -23,8 +23,9 @@ export class ItIsAMatchComponent implements OnInit {
   @Output() resetUserLiked = new EventEmitter<void>();
 
   animationState: string;
+  defaultUserProfilePicture: string = "../../../assets/user.png";
   constructor() { }
-
+  
   ngOnInit(): void {
   }
 
@@ -37,7 +38,7 @@ export class ItIsAMatchComponent implements OnInit {
   }
 
   startAnimation(state) {
-    console.log(state)
+    
     if(!this.animationState) {
       this.animationState = state
     }

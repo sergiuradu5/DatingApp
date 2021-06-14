@@ -38,6 +38,7 @@ namespace DatingApp.API.Helpers
             CreateMap<UserParamsAndSearchFilterFromQueryDTO, UserSearchFilter >();
             
             CreateMap<GeolocationForUpdateDTO, Geolocation>();
+            CreateMap<GeolocationForRegisterDTO, Geolocation>();
 
         }
     }

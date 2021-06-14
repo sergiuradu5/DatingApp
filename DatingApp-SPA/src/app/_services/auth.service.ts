@@ -28,7 +28,9 @@ export class AuthService {
     private userService: UserService, 
     private geolocationService: GeolocationService,
     private alertify: AlertifyService
-    ) { }
+    ) { 
+      this.geolocationService.initiateLocation();
+    }
 
   changeMemberPhoto(photoUrl: string) {
     this.photoUrl.next(photoUrl);
@@ -52,7 +54,7 @@ export class AuthService {
           this.userService.resetUserAfterLogin(this.currentUser);
           this.userService.initiateUserSearchFilter(this.localStorageUserSearchFilter);
           this.geolocationService.updateUserGeolocation(this.decodedToken.nameid).subscribe(data => {
-            this.alertify.success('Location updated successfully');
+            
           }, error => {
             this.alertify.error(error);
           })

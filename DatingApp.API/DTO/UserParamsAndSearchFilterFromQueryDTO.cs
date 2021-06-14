@@ -17,6 +17,8 @@ namespace DatingApp.API.DTO
       public bool ShowNonVisitedMembers {get; set; } = false;
       public bool WithDetails { get; set; } = false;
       public bool ShowMatches { get; set; } = false;
+      public bool ShowDistance { get; set; } = false;
+      public bool DistanceLimit { get; set; } = false;
 
       
       public int UserId {get; set;}
@@ -26,6 +28,7 @@ namespace DatingApp.API.DTO
       public int MaxAge { get; set; } = 99;
 
       public string OrderBy { get; set; }
+      public int MaxDistance { get; set; } = 200;
     }
 
 }

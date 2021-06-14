@@ -20,7 +20,7 @@ export class DeleteModalComponent {
     ) { }
 
   deleteUser() {
-    this.userService.deleteUser(this.userId).subscribe(data => {
+    this.userService.deleteUser(this.authService.decodedToken.nameid, this.authService.decodedToken.unique_name).subscribe(data => {
     this.alertify.success('Profile deleted successfully');
     localStorage.removeItem('token');
     localStorage.removeItem('user');

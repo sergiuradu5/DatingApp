@@ -1,11 +1,11 @@
 <div class="container mt-4">
-    <h1> Settings </h1>
+    <h1> Search Filters </h1>
     <div class="">
           <form class="form card px-3 py-3 mb-5 mt-4 d-flex flex-column justify-content-center align-items-start" #form="ngForm" (ngSubmit)="updateUserSearchFilter()" novalidate>
             <div class="form-group d-flex flex-column justify-content-start align-items-start">
               <label for="minAge" class="mr-3">Age range</label>
               <div class="custom-slider">
-                <ngx-slider [options]="sliderOptions" 
+                <ngx-slider [options]="ageSliderOptions" 
                 (click)="updateUserSearchFilter()"
                 [(value)]="userSearchFilter.minAge" 
                 [(highValue)]="userSearchFilter.maxAge">
@@ -26,6 +26,16 @@
                     {{gender.display}}
                 </option>
               </select>
+            </div>
+
+            <div class="form-group d-flex flex-column justify-content-start align-items-start">
+              <label for="maxDistance" class="mr-3">Maximum distance in kilometers</label>
+              <div class="custom-slider">
+                <ngx-slider [options]="distanceSliderOptions" 
+                (click)="updateUserSearchFilter()"
+                [(value)]="userSearchFilter.maxDistance">
+              </ngx-slider>
+              </div>
             </div>
 
             <div class="mb-3">

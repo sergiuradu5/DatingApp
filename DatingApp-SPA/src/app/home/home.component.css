@@ -1,6 +1,15 @@
 .home-logo{
     width: 200px;
     height: auto;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+    transform: scale(1);
+    transition: all 0.3s;
+}
+
+.home-logo:hover {
+    transform: scale(1.1);
+    transition: all 0.3s;
+    cursor: pointer;
 }
 
 .register-container {

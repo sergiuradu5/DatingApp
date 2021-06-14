@@ -7,7 +7,6 @@ import { trigger, keyframes, animate, transition } from '@angular/animations';
 import * as kf from '../keyframes';
 import { NgxGalleryImage, NgxGalleryOptions, NgxGalleryAnimation, NgxGalleryImageSize, NgxGalleryComponent } from 'ngx-gallery';
 
-import { ActionService } from 'src/app/_services/action.service';
 import { Router } from '@angular/router';
 import * as helpers from 'src/app/_helpers/isEmpty';
 
@@ -17,8 +16,8 @@ import * as helpers from 'src/app/_helpers/isEmpty';
   styleUrls: ['./member-card-detailed.component.css'],
   animations: [ 
     trigger('cardAnimator', [      
-      transition('* => slideOutLeft', animate(350, keyframes(kf.slideOutLeft))),
-      transition('* => slideOutRight', animate(350, keyframes(kf.slideOutRight))),
+      transition('* => slideOutLeft', animate("350ms ease-in", keyframes(kf.slideOutLeft))),
+      transition('* => slideOutRight', animate("350ms ease-in", keyframes(kf.slideOutRight))),
       
     ])
   ]
@@ -54,7 +53,6 @@ onResize(event?) {
     private authService: AuthService,
     private userService: UserService,
     private alertify: AlertifyService,
-    private actionService: ActionService,
     private router: Router
   ) { 
     this.onResize();
@@ -109,6 +107,14 @@ onResize(event?) {
 
   getImages() {
     const imageUrls = [];
+    if (this.user.photos.length == 0) {
+      imageUrls.push({
+        small: "../../../assets/user.png",
+        medium: "../../../assets/user.png",
+        big: "../../../assets/user.png"
+      })
+    } else {
+
     imageUrls.push({
       small: this.user.photoUrl,
       medium: this.user.photoUrl,
@@ -123,6 +129,7 @@ onResize(event?) {
         });
       }
     }
+  }
     return imageUrls;
   }
 
@@ -131,7 +138,7 @@ onResize(event?) {
   }
 
   scrollToTheBottom() {
-    console.log("scrollToBottom");
+    
         this.myScrollContainerToBottom.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
                    
   }
@@ -141,7 +148,7 @@ onResize(event?) {
   }
 
   startAnimation(state) {
-    console.log(state)
+    
     if(!this.animationState) {
       this.animationState = state
     }
@@ -154,7 +161,6 @@ onResize(event?) {
   
 
   skipUser() {
-    this.actionService.resetStartIndexOfMainCard();
     this.startAnimation('slideOutLeft');
     setTimeout( () => {
       this.proceedToNextUser();
@@ -164,13 +170,12 @@ onResize(event?) {
 
   proceedToNextUser() {
     this.skipCurrentUser.emit(this.user.id);
-    this.actionService.resetStartIndexOfMainCard;
     this.visitUser(this.user.id);
   }
 
   visitUser(visitedId: number) {
     this.userService.visitUser(this.authService.decodedToken.nameid, visitedId).subscribe( data=> {
-      this.alertify.success('You have visited ' + this.user.knownAs);
+      
     }, error => {
       this.alertify.error(error);
     })
@@ -179,9 +184,9 @@ onResize(event?) {
 
   sendLike(recipientId: number)
   {
-    this.actionService.resetStartIndexOfMainCard;
+    
     this.userService.sendLike(this.authService.decodedToken.nameid, recipientId).subscribe( data=> {
-      this.alertify.success('You have liked ' + this.user.knownAs);
+      
     }, error => {
       this.alertify.error(error);
     }); 
@@ -194,10 +199,10 @@ onResize(event?) {
           knownAs: this.user.knownAs,
           photoUrl: this.user.photoUrl
         }
-        console.log('[member-card-detailed] userLikedForItIsAMatch: ', userLiked);
+        
         this.userLikedForItIsAMatch.emit(userLiked); //Sending the relevant matched user data to the parent component
       } else {
-        console.log('[member-card-detailed] userLikedForItIsAMatch: ', null);
+        
         this.userLikedForItIsAMatch.emit(null);
       }
       this.proceedToNextUser();

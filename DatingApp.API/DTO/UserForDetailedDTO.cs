@@ -23,6 +23,7 @@ namespace DatingApp.API.DTO
 
         public bool HasLikedCurrentUser {get; set; }
         public bool HasMatchedCurrentUser {get; set; }
+        public double DistanceFromCurrentUser { get; set; }
         public ICollection<PhotoForDetailedDTO> Photos { get; set; }
     }
 }

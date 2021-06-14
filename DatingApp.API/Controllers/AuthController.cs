@@ -43,6 +43,10 @@ namespace DatingApp.API.Controllers
         public async Task<IActionResult> Register (UserForRegisterDTO userForRegisterDTO)
         {
          
+            userForRegisterDTO.KnownAs = char.ToUpper(userForRegisterDTO.KnownAs[0]) + userForRegisterDTO.KnownAs.Substring(1).ToLower();
+            userForRegisterDTO.City = char.ToUpper(userForRegisterDTO.City[0]) + userForRegisterDTO.City.Substring(1).ToLower();
+            userForRegisterDTO.Country = char.ToUpper(userForRegisterDTO.Country[0]) + userForRegisterDTO.Country.Substring(1).ToLower();
+
             var userToCreate = _mapper.Map<User>(userForRegisterDTO);
             
             var result = await _userManager.CreateAsync(userToCreate, userForRegisterDTO.Password);
@@ -65,11 +69,14 @@ namespace DatingApp.API.Controllers
                 Gender = gender,
                 MinAge = 18,
                 MaxAge = 99,
-                OrderBy = "lastActive"
+                OrderBy = "lastActive",
+                MaxDistance = 200
             };
 
             var geolocation = new Geolocation {
-                UserId = userToCreate.Id
+                UserId = userToCreate.Id,
+                Latitude = userToCreate.LastSavedGeolocation.Latitude,
+                Longitude = userToCreate.LastSavedGeolocation.Longitude
             };
 
             if(result.Succeeded)
@@ -138,7 +145,7 @@ namespace DatingApp.API.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = System.DateTime.Now.AddHours(1),
+                Expires = System.DateTime.Now.AddDays(1),
                 SigningCredentials = creds
             };
             var tokenHandler = new JwtSecurityTokenHandler();

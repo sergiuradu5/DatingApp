@@ -35,10 +35,10 @@ login()
 {
   this.authService.login(this.model).subscribe( next => {
     this.alertify.success('Logged in successfully');
-  }, error => {
-    this.alertify.error(error);
-  }, ()=> {
     this.router.navigate(['/members']);
+  }, error => {
+    
+    this.alertify.error(error);
   });
 }
 
@@ -49,7 +49,7 @@ loggedIn()
 
 toggleSideDrawerEvent() {
   this.isSideDrawerOpen = !this.isSideDrawerOpen;
-  console.log('SideDrawer toggled from the navbar, isSideDrawerOpen: ', this.isSideDrawerOpen);
+  
   this.toggleSideDrawer.emit(this.isSideDrawerOpen);
   
 }

@@ -6,7 +6,7 @@
             <img src="{{userLiker?.photoUrl}}">
         </div>
         <div class="user-liked-photo">
-            <img src="{{userLiked?.photoUrl}}">
+            <img src="{{userLiked?.photoUrl ? userLiked?.photoUrl : defaultUserProfilePicture}}">
         </div>
     </div>
 </div>

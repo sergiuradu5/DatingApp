@@ -8,6 +8,7 @@ import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { UserSearchFilter } from 'src/app/_models/user-search-filter';
 import { UserSearchParams } from 'src/app/_models/user-search-params';
 import { Subject } from 'rxjs/internal/Subject';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-member-list',
@@ -29,6 +30,7 @@ export class MemberListComponent implements OnInit {
  
   constructor(private userService: UserService,
           private alertify: AlertifyService,
+          private authService: AuthService,
           private route: ActivatedRoute,
           private router: Router
           )
@@ -52,14 +54,14 @@ export class MemberListComponent implements OnInit {
   
 
   skipCurrentUser(userId: number) {
-    console.log(`skipCurrentUser(${userId}) -> enabled`);
+    
     this.users.forEach((user,index)=>{
       if(user.id==userId)  {
         this.users.splice(index, 1);
         this.pagination.totalItems -= 1;
       }
     })
-    console.log("Users: ", this.users);
+    
     if (this.users.length <= 1) {
       this.loadNextUsersAndConcatenate();
       
@@ -73,13 +75,16 @@ export class MemberListComponent implements OnInit {
       likers: false,
       likees: false,
       showNonVisitedMembers: true, 
-      withDetails: true
+      withDetails: true,
+      showDistance: true,
+      distanceLimit: true,
+      userId: this.authService.decodedToken.nameid
     };
     this.userService.getUsers(userParams, this.userSearchFilter)
     .subscribe((res: PaginatedResult<User[]>) => {
       this.users = [ ...res.result, ...this.users.slice().reverse()];
       this.pagination = res.pagination;
-      console.log("Users after concat: ", this.users);
+      
     }, error => {
       this.alertify.error(error);
     })
@@ -92,7 +97,10 @@ export class MemberListComponent implements OnInit {
       likers: false,
       likees: false,
       showNonVisitedMembers: true,
-      withDetails: true
+      withDetails: true,
+      showDistance: true,
+      distanceLimit: true,
+      userId: this.authService.decodedToken.nameid
     };
     this.userService.getUsers(userParams, this.userSearchFilter)
     .subscribe((res: PaginatedResult<User[]>) => {
@@ -110,12 +118,12 @@ export class MemberListComponent implements OnInit {
     this.userLikedForItIsAMatch = event;
     
     this.showItIsAMatch = true;
-    console.log('[member-list] startItIsAMatch, userLiked and showItIsAMatch', this.userLikedForItIsAMatch, this.showItIsAMatch);
+    
     }
   }
 
   resetUserLiked(event) {
-    console.log('[member-list] resetUserLiked');
+    
     this.userLikedForItIsAMatch = null;
     this.showItIsAMatch = false;
   }

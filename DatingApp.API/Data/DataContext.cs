@@ -42,11 +42,13 @@ namespace DatingApp.API.Data
                 userRole.HasOne(ur => ur.Role)
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.RoleId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
 
                 userRole.HasOne(ur => ur.User)
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
                 
             });

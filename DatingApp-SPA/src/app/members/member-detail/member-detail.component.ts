@@ -71,7 +71,6 @@ export class MemberDetailComponent implements OnInit {
   sendLike(recipientId: number)
   {
     this.userService.visitUser(this.authService.decodedToken.nameid, recipientId).subscribe (data => {
-      this.alertify.success('You have visited ' + this.user.knownAs);
     })
     this.userService.sendLike(this.authService.decodedToken.nameid, recipientId).subscribe( data=> {
       this.user.hasMatchedCurrentUser = true;

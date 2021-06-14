@@ -15,10 +15,15 @@ import { UserSearchFilter } from '../_models/user-search-filter';
 })
 export class SettingsComponent implements OnInit {
   // Values for the ngx-slider
-  sliderOptions: Options = {
+  ageSliderOptions: Options = {
     floor: 18,
     ceil: 99
   };
+
+  distanceSliderOptions: Options = {
+    floor: 1,
+    ceil: 300
+  }
 
   user: User = JSON.parse(localStorage.getItem('user'));
   genderList = [{value: 'male', display: 'Males'}, {value: 'female', display: 'Females'}, {value: 'other', display: 'Other' }];
@@ -38,12 +43,12 @@ export class SettingsComponent implements OnInit {
     // });
     this.userService.currentUserSearchFilter.subscribe(userSearchFilter => {
       this.userSearchFilter = userSearchFilter;
-      console.log(`[SettingsComponent] ngOnInit() this.userSearchFilter: `, this.userSearchFilter);
+      
     })
   }
 
   updateUserSearchFilter() {
-    console.log('[SettingsComponent] Current user search filter: ', this.userSearchFilter);
+    
     this.userService.updateUserSearchFilter(this.authService.decodedToken.nameid, this.userSearchFilter);
   }
 

@@ -47,7 +47,8 @@ export class MatchesComponent implements OnInit {
       likers: this.likersOrMatchesParam === 'Likers' ? true : false,
       likees: false,
       showMatches: this.likersOrMatchesParam === 'Matches' ? true : false,
-      showNonVisitedMembers: false
+      showNonVisitedMembers: false,
+      userId: this.authService.decodedToken.nameid
     }
     this.userService.getUsers(userParams)
     .subscribe((res: PaginatedResult<User[]>) => {

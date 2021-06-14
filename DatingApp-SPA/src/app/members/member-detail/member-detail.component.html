@@ -17,6 +17,10 @@
             <p>{{ user.city }}, {{ user?.country }}</p>
           </div>
           <div>
+            <strong>Distance: </strong>
+            <p>{{ user.distanceFromCurrentUser ? user.distanceFromCurrentUser + ' km' : 'Less than 1 km away' }}</p>
+          </div>
+          <div>
             <strong>Age: </strong>
             <p>{{ user.age }}</p>
           </div>

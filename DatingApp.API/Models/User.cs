@@ -28,6 +28,8 @@ namespace DatingApp.API.Models
         public bool HasMatchedCurrentUser {get; set; } = false;
         //Property for last saved  geo Location
         public virtual Geolocation LastSavedGeolocation {get; set; }
+        [NotMapped]
+        public double DistanceFromCurrentUser {get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
 
         public virtual ICollection<Like> Likers{ get; set; }

@@ -37,6 +37,7 @@ export class UserService {
   currentUserSearchFilter = this.userSearchFilter.asObservable();
 
 constructor(private http: HttpClient) {
+  this.userSearchFilter.next(this.localStorageUserSearchFilter);
  }
 
 getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): Observable<PaginatedResult<User[]>> {
@@ -44,11 +45,14 @@ getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): O
 
   let params = new HttpParams();
 
+  if(userParams.userId != null) {
+    params = params.append('userId', userParams.userId.toString());
+  }
+
   if(userParams.pageNumber != null && userParams.pageSize != null) {
     params = params.append('pageNumber', userParams.pageNumber.toString());
     params = params.append('pageSize', userParams.pageSize.toString());
   }
-  // let userSearchFilterForBody: any = {};
 
   if(userParams.likers === true)
   {
@@ -60,7 +64,7 @@ getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): O
     params = params.append('likees', 'true');
   }
   
-  console.log(`showNonVisitedMembers: ${userParams.showNonVisitedMembers}`);
+  
   if(userParams.showNonVisitedMembers) {
     params = params.append('showNonVisitedMembers', 'true');
   }
@@ -73,6 +77,10 @@ getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): O
     params = params.append('showMatches', 'true');
   }
 
+  if (userParams.showDistance) {
+    params = params.append('showDistance', 'true');
+  }
+
   if(userSearchFilter != null)
   { 
     // userSearchFilterForBody.minAge = userSearchFilter.minAge;
@@ -83,6 +91,11 @@ getUsers(userParams?: UserSearchParams, userSearchFilter? : UserSearchFilter): O
     params = params.append('maxAge', userSearchFilter.maxAge.toString());
     params = params.append('gender', userSearchFilter.gender);
     params = params.append('orderBy', userSearchFilter.orderBy);
+    if (userParams.distanceLimit) {
+      params = params.append('distanceLimit', 'true');
+      params = params.append('maxDistance', userSearchFilter.maxDistance.toString());
+    }
+    
   }
 
   
@@ -113,8 +126,8 @@ updateUser(id: number, user: User) {
  return this.http.put(this.baseUrl + 'users/' + id, user);
 }
 
-deleteUser(id) :Observable<User> {
-  return this.http.delete<User>(this.baseUrl + 'users/' + id);
+deleteUser(id, userName) :Observable<User> {
+  return this.http.delete<User>(this.baseUrl + 'users/' + id + '/' + userName);
 }
 
 setMainPhoto(userId: number, id: number)
@@ -179,7 +192,7 @@ markAsRead(userId: number, messageId: number) {
 initiateUserSearchFilter(userSearchFilter: any) {
   
   this.userSearchFilter.next(userSearchFilter);
-  console.log(`>>>>Initiating user search filter with localStorage.get('searchFilter'): `, this.currentUserSearchFilter)
+  
 }
 
 updateUserSearchFilter(userId: number, userSearchFilter: UserSearchFilter) {
@@ -213,6 +226,7 @@ resetUserSearchFilter(id: number) {
     defaultUserSearchFilter.minAge = 18;
     defaultUserSearchFilter.maxAge = 99;
     defaultUserSearchFilter.orderBy = 'lastActive';
+    defaultUserSearchFilter.maxDistance = 200;
 
     this.userSearchFilter.next(defaultUserSearchFilter);
     this.http.put(this.baseUrl + 'users/' + id + '/searchFilter', defaultUserSearchFilter)
