@@ -83,7 +83,7 @@ namespace DatingApp.API.Data
 
         //This method is used to retreive User Data when A User edits his own profile (displaying non-approved photos)
         public async Task<User> GetOwnUser (int id) {
-           var user = await _context.Users.Include(p => p.Photos).IgnoreQueryFilters()
+           var user = await _context.Users.IgnoreQueryFilters()
             .FirstOrDefaultAsync(u => u.Id == id);
            return user;
         }
